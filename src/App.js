@@ -1,12 +1,11 @@
 import './App.css';
+import Header from './components/Header/Header';
 // import 
 
 function App() {
   return (
-    <div className="App">
-      <h4>Hello World</h4>
-
-      {/* Header */}
+    <div className="app">
+      <Header/>
       {/* Sidebar */}
       {/* React-router -> Chat Screen */}
     </div>
