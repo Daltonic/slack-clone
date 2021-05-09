@@ -16,7 +16,7 @@
 
 .header__left > .MuiSvgIcon-root {
   margin-left: auto;
-  margin-right: 30px;
+  margin-right: 20px;
 }
 
 .header__middle {
@@ -49,3 +49,5 @@
   justify-content: space-between;
   margin: 0 20px;
 }
+
+
