@@ -1,15 +1,18 @@
-import './App.css';
-import Header from './components/Header/Header';
-// import 
+import './App.css'
+import Header from './components/header/Header'
+import Sidebar from './components/sidebar/Sidebar'
+// import
 
 function App() {
   return (
     <div className="app">
-      <Header/>
-      {/* Sidebar */}
-      {/* React-router -> Chat Screen */}
+      <Header />
+      <main className="app__body">
+        <Sidebar />
+        {/* React-router -> Chat Screen */}
+      </main>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
