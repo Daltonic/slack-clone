@@ -1,0 +1,42 @@
+.sidebarOption {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  padding-left: 2px;
+  cursor: pointer;
+}
+
+.sidebarOption:hover {
+  background-color: #340e36;
+  opacity: 0.9;
+}
+
+.sidebarOption__icon {
+  padding: 10px;
+  font-size: 15px !important;
+}
+
+.sidebarOption__channel {
+  padding: 10px 0;
+}
+
+.sidebarOption__hash {
+  padding: 10px;
+  padding-left: 12px;
+}
+
+.sidebarOption > h3 {
+  font-weight: 500;
+}
+
+.sidebarOption__sub {
+  margin-left: 10px;
+}
+
+.sidebarOption > .MuiAvatar-root {
+  border-radius: 20%;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 5px 10px;
+}

@@ -43,3 +43,9 @@
   margin-right: 2px;
   color: green;
 }
+
+.sidebar > hr {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #49274b;
+}
