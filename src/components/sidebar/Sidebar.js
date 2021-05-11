@@ -14,6 +14,18 @@ import { Avatar } from '@material-ui/core'
 
 function Sidebar() {
   const [channels, setChannels] = useState([])
+  const [dms, setDms] = useState([])
+
+  function getDirectMessages() {
+    db.collection('dms').onSnapshot((snapshot) => {
+      setDms(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+      )
+    })
+  }
 
   function getChannels() {
     db.collection('channels').onSnapshot((snapshot) => {
@@ -28,6 +40,7 @@ function Sidebar() {
 
   useEffect(() => {
     getChannels()
+    getDirectMessages()
   }, [])
 
   return (
@@ -73,22 +86,13 @@ function Sidebar() {
       <hr />
       <SidebarOption Icon={ArrowDropDownIcon} title="Direct Messages" />
       <hr />
-      <SidebarOption
-        Icon={Avatar}
-        title="Gospel Darlington"
-        sub="sidebarOption__sub"
-      />
-      <SidebarOption
-        Icon={Avatar}
-        title="Priyanka Gurnani"
-        sub="sidebarOption__sub"
-      />
-      <SidebarOption
-        Icon={Avatar}
-        title="Harsha Patil"
-        sub="sidebarOption__sub"
-      />
-      <SidebarOption Icon={Avatar} title="Ajay Garg" sub="sidebarOption__sub" />
+      {dms.map((dm) => (
+        <SidebarOption
+          Icon={FiberManualRecordIcon}
+          title={dm.name}
+          sub="sidebarOption__sub sidebarOption__color"
+        />
+      ))}
     </div>
   )
 }
