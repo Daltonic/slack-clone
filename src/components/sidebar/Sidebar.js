@@ -10,7 +10,6 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import AddIcon from '@material-ui/icons/Add'
-import { Avatar } from '@material-ui/core'
 
 function Sidebar() {
   const [channels, setChannels] = useState([])
@@ -90,6 +89,7 @@ function Sidebar() {
         <SidebarOption
           Icon={FiberManualRecordIcon}
           title={dm.name}
+          key={dm.id}
           sub="sidebarOption__sub sidebarOption__color"
         />
       ))}
