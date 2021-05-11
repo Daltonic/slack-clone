@@ -4,7 +4,7 @@
   justify-content: space-between;
   padding: 10px 0;
   color: white;
-  background-color: var(--slack-color);
+  background-color: #340e36;
 }
 
 .header__left {
