@@ -1,11 +1,11 @@
-.chat {
+.user {
   flex: 0.7;
   flex-grow: 1;
   overflow-y: auto;
   padding-bottom: 150px;
 }
 
-.chat__header {
+.user__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -13,29 +13,34 @@
   border-bottom: 1px solid lightgray;
 }
 
-.chat__channelName {
+.user__userName {
   display: flex;
   align-items: center;
   text-transform: lowercase;
 }
 
-.chat__channelName > .MuiSvgIcon-root {
+.user__userName > .MuiSvgIcon-root {
   margin-left: 5px;
   font-size: 16px;
 }
 
-.chat__headerRight {
+.user__userName > strong > .MuiSvgIcon-root {
+  color: green;
+  font-size: 12px;
+}
+
+.user__headerRight {
   display: flex;
   align-items: center;
 }
 
-.chat__headerRight > .MuiSvgIcon-root {
+.user__headerRight > .MuiSvgIcon-root {
   margin-left: 15px;
   font-size: 16px;
   cursor: pointer;
 }
 
-.chat__headerRight > .MuiSvgIcon-root:hover {
+.user__headerRight > .MuiSvgIcon-root:hover {
   transform: scale(1.3);
   transition: all 0.3s ease-in-out;
 }

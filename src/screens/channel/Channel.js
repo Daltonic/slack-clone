@@ -1,4 +1,4 @@
-import './Chat.css'
+import './Channel.css'
 import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined'
@@ -6,7 +6,7 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
 import db from '../../firebase'
 
-function Chat() {
+function Channel() {
   const { id } = useParams()
   const [channel, setChannel] = useState(null)
 
@@ -19,15 +19,15 @@ function Chat() {
   }, [id])
 
   return (
-    <div className="chat">
-      <div className="chat__header">
-        <div className="chat__headerLeft">
-          <h4 className="chat__channelName">
-            <strong>#{channel.name}</strong>
+    <div className="channel">
+      <div className="channel__header">
+        <div className="channel__headerLeft">
+          <h4 className="channel__channelName">
+            <strong>#{channel?.name}</strong>
             <StarBorderOutlinedIcon />
           </h4>
         </div>
-        <div className="chat__headerRight">
+        <div className="channel__headerRight">
           <PersonAddOutlinedIcon />
           <InfoOutlinedIcon />
         </div>
@@ -36,4 +36,4 @@ function Chat() {
   )
 }
 
-export default Chat
+export default Channel

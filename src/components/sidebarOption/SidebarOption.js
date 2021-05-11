@@ -2,11 +2,15 @@ import './SidebarOption.css'
 import { useHistory } from 'react-router-dom'
 import db from '../../firebase'
 
-function SidebarOption({ Icon, title, sub, id, addChannelOption }) {
+function SidebarOption({ Icon, title, sub, id, addChannelOption, user }) {
   const history = useHistory()
   const selectChannel = () => {
     if (id) {
-      history.push(`/channels/${id}`)
+      if (user) {
+        history.push(`/users/${id}`)
+      }else {
+        history.push(`/channels/${id}`)
+      }
     } else {
       history.push(title)
     }

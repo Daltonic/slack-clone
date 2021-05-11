@@ -92,8 +92,10 @@ function Sidebar() {
         <SidebarOption
           Icon={FiberManualRecordIcon}
           title={dm.name}
+          id={dm.id}
           key={dm.id}
           sub="sidebarOption__sub sidebarOption__color"
+          user
         />
       ))}
     </div>
