@@ -65,12 +65,14 @@ function Sidebar() {
           <SidebarOption
             Icon={LockOutlinedIcon}
             title={channel.name}
+            id={channel.id}
             key={channel.id}
             sub="sidebarOption__sub"
           />
         ) : (
           <SidebarOption
             title={channel.name}
+            id={channel.id}
             key={channel.id}
             sub="sidebarOption__sub"
           />
@@ -81,6 +83,7 @@ function Sidebar() {
         Icon={AddIcon}
         title="Add Channel"
         sub="sidebarOption__sub"
+        addChannelOption
       />
       <hr />
       <SidebarOption Icon={ArrowDropDownIcon} title="Direct Messages" />
