@@ -10,13 +10,30 @@ import Message from '../../components/message/Message'
 function Channel() {
   const { id } = useParams()
   const [channel, setChannel] = useState(null)
+  const [messages, setMessages] = useState([])
 
-  useEffect(() => {
+  const getChannel = (id) => {
     db.collection('channels')
       .doc(id)
       .onSnapshot((snapshot) => {
         setChannel(snapshot.data())
       })
+  }
+
+  const getChannelMessages = (id) => {
+    db.collection(`channels/${id}/messages`).onSnapshot((snapshot) => {
+      setMessages(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+      )
+    })
+  }
+
+  useEffect(() => {
+    getChannel(id)
+    getChannelMessages(id)
   }, [id])
 
   return (
@@ -33,15 +50,18 @@ function Channel() {
           <InfoOutlinedIcon />
         </div>
       </div>
-      
+
       <div className="channel__messages">
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
-        <Message />
+        {messages.map((message) => (
+          <Message
+            uid={message?.uid}
+            name={message?.name}
+            avatar={message?.avatar}
+            message={message?.message}
+            timestamp={message?.timestamp}
+            key={message?.uid}
+          />
+        ))}
       </div>
     </div>
   )

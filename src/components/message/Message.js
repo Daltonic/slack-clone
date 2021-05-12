@@ -1,21 +1,22 @@
 import './Message.css'
 import { Avatar } from '@material-ui/core'
 
-function Message() {
+function Message({ uid, name, avatar, message, timestamp }) {
   return (
     <div className="message">
       <div className="message__left">
-        <Avatar className="message__avatar" src="" alt="" />
+        <Avatar
+          className="message__avatar"
+          src={avatar}
+          alt={`${name} ${uid} - Image`}
+        />
       </div>
       <div className="message__right">
         <div className="message__details">
-          <a href="/">Gospel Darlington</a>
-          <small>12:45 PM</small>
+          <a href={`/users/${uid}`}>{name}</a>
+          <small>{`${timestamp}`}</small>
         </div>
-        <p className="message__text">
-          Can I get the promotional link to my recent tutorial so I can start
-          sharing?
-        </p>
+        <p className="message__text">{message}</p>
       </div>
     </div>
   )
