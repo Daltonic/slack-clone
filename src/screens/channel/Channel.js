@@ -21,15 +21,22 @@ function Channel() {
   }
 
   const getChannelMessages = (id) => {
-    db.collection(`channels/${id}/messages`).onSnapshot((snapshot) => {
-      setMessages(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-      )
-    })
+    db.collection(`channels/${id}/messages`)
+      .orderBy('timestamp', 'asc')
+      .onSnapshot((snapshot) => {
+        setMessages(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }))
+        )
+      })
   }
+
+  // const scrollToEnd = () => {
+  //   const elmnt = document.getElementById('messages-container')
+  //   elmnt.scrollTop = elmnt.scrollHeight
+  // }
 
   useEffect(() => {
     getChannel(id)
@@ -51,7 +58,7 @@ function Channel() {
         </div>
       </div>
 
-      <div className="channel__messages">
+      <div id="messages-container" className="channel__messages">
         {messages.map((message) => (
           <Message
             uid={message?.uid}

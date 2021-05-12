@@ -27,3 +27,30 @@
   font-weight: 700;
   text-transform: capitalize;
 }
+
+.message__text {
+  font-size: 14px;
+}
+
+.message__data {
+  display: flex;
+  align-items: center;
+  flex: 0.7;
+}
+
+.message__actions {
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex: 0.3;
+}
+
+.message__actions__show {
+  visibility: visible;
+}
+
+.message__actions .MuiSvgIcon-root {
+  margin-right: 10px;
+  cursor: pointer;
+}
