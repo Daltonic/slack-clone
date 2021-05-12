@@ -1,0 +1,28 @@
+.message {
+  display: flex;
+  align-items: center;
+  margin: 10px 0;
+  padding: 5px 20px;
+}
+
+.message:hover {
+  background-color: #f3f3f3;
+}
+
+.message__left .MuiAvatar-root {
+  border-radius: 20%;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
+.message__left {
+  margin-right: 10px;
+}
+
+.message__details a {
+  margin-right: 5px;
+  color: black;
+  text-decoration: none;
+  font-weight: 700;
+}

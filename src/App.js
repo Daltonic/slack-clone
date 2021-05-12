@@ -1,7 +1,7 @@
 import './App.css'
 import Header from './components/header/Header'
 import Sidebar from './components/sidebar/Sidebar'
-import Channel from './screens/channel/Channel'
+import Channel from './screens/channel/Channel' 
 import User from './screens/user/User' 
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 

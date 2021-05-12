@@ -5,6 +5,7 @@ import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
 import db from '../../firebase'
+import Message from '../../components/message/Message'
 
 function Channel() {
   const { id } = useParams()
@@ -31,6 +32,16 @@ function Channel() {
           <PersonAddOutlinedIcon />
           <InfoOutlinedIcon />
         </div>
+      </div>
+      
+      <div className="channel__messages">
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
+        <Message />
       </div>
     </div>
   )
