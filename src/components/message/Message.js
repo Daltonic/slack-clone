@@ -35,7 +35,8 @@ function Message({ uid, name, avatar, message, timestamp }) {
         </div>
         <div className="message__right">
           <div className="message__details">
-            <a href={`/users/${uid}`}>{name}</a>
+            {/* <a href={`/users/${uid}`}>{name}</a> */}
+            <a href="#popup1">{name}</a>
             <small>{toReadableString(new Date(timestamp.toDate()))}</small>
           </div>
           <p className="message__text">{message}</p>
