@@ -15,7 +15,7 @@ function Sidebar() {
   const [channels, setChannels] = useState([])
   const [dms, setDms] = useState([])
 
-  function getDirectMessages() {
+  const getDirectMessages = () => {
     db.collection('dms').onSnapshot((snapshot) => {
       setDms(
         snapshot.docs.map((doc) => ({
@@ -26,7 +26,7 @@ function Sidebar() {
     })
   }
 
-  function getChannels() {
+  const getChannels = () => {
     db.collection('channels').onSnapshot((snapshot) => {
       setChannels(
         snapshot.docs.map((doc) => ({

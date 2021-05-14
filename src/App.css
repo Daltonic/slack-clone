@@ -27,6 +27,11 @@ body {
   opacity: 1;
 }
 
+.overlay__show {
+  visibility: visible;
+  opacity: 1;
+}
+
 .popup {
   margin: 70px auto;
   padding: 20px;
@@ -51,11 +56,39 @@ body {
   font-weight: bold;
   text-decoration: none;
   color: #333;
+  cursor: pointer;
 }
 .popup .close:hover {
-  color: #06D85F;
+  color: var(--slack-color);
 }
 .popup .content {
   max-height: 30%;
   overflow: auto;
+  margin: 20px 0;
+}
+
+#add-channel-form {
+  display: flex;
+  flex-direction: column;
+}
+
+#add-channel-form > .form-control {
+  margin-bottom: 10px;
+  padding: 10px;
+  color: gray;
+  border-radius: 9px;
+  border: 1px solid gray;
+}
+
+#add-channel-form > .form-btn {
+  border: none;
+  padding: 10px;
+  color: gray;
+  border-radius: 9px;
+  cursor: pointer;
+}
+
+#add-channel-form > .form-control,
+#add-channel-form > .form-btn:focus {
+  outline: none;
 }
