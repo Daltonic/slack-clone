@@ -16,7 +16,7 @@ function SidebarOption({ Icon, title, sub, id, addChannelOption, user }) {
   }
 
   const addChannel = () => {
-    const modal = document.getElementById('popup1')
+    const modal = document.getElementById('add-channel-popup')
     modal.setAttribute('class', 'overlay overlay__show')
   }
 

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
+import LockIcon from '@material-ui/icons/Lock';
 import db from '../../firebase'
 import Message from '../../components/message/Message'
 
@@ -48,7 +49,10 @@ function Channel() {
       <div className="channel__header">
         <div className="channel__headerLeft">
           <h4 className="channel__channelName">
-            <strong>#{channel?.name}</strong>
+            <strong>
+              {channel?.private ? <LockIcon /> : '#'}
+              {channel?.name}
+            </strong>
             <StarBorderOutlinedIcon />
           </h4>
         </div>

@@ -12,8 +12,9 @@ function App() {
 
   const toggleClose = (e) => {
     e.preventDefault()
-    const modal = document.getElementById('popup1')
+    const modal = document.getElementById('add-channel-popup')
     modal.setAttribute('class', 'overlay')
+    setForm({})
   }
 
   const handleChange = (e) => {
@@ -32,7 +33,7 @@ function App() {
         private: form.private === "true",
       })
       .then(() => {
-        const modal = document.getElementById('popup1')
+        const modal = document.getElementById('add-channel-popup')
         modal.setAttribute('class', 'overlay')
         setForm({})
       })
@@ -57,7 +58,7 @@ function App() {
           </Switch>
         </main>
 
-        <div id="popup1" className="overlay">
+        <div id="add-channel-popup" className="overlay">
           <div className="popup">
             <h2>Create a channel</h2>
             <a href="/" className="close" onClick={(e) => toggleClose(e)}>
@@ -70,6 +71,7 @@ function App() {
                   className="form-control"
                   type="text"
                   placeholder="Channel Name"
+                  value={form?.channel || ''}
                   maxLength="10"
                   required
                   onChange={(e) => handleChange(e)}
@@ -78,10 +80,11 @@ function App() {
                 <select
                   name="private"
                   className="form-control"
+                  value={form?.private || ''}
                   required
                   onChange={(e) => handleChange(e)}
                 >
-                  <option value={false}>Select Privacy</option>
+                  <option value={''}>Select Privacy</option>
                   <option value={false}>Public</option>
                   <option value={true}>Private</option>
                 </select>
