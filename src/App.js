@@ -5,6 +5,7 @@ import Channel from './screens/channel/Channel'
 import User from './screens/user/User'
 import { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import db from './firebase'
 
 function App() {
   const [form, setForm] = useState({})
@@ -17,9 +18,24 @@ function App() {
 
   const handleChange = (e) => {
     setForm({
-      [e.target.name]: e.target.value
+      ...form,
+      [e.target.name]: e.target.value,
     })
-    console.log(form)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+
+    db.collection('/channels')
+      .add({
+        name: form.channel,
+        private: form.private === "true",
+      })
+      .then(() => {
+        const modal = document.getElementById('popup1')
+        modal.setAttribute('class', 'overlay')
+        setForm({})
+      })
   }
 
   return (
@@ -48,7 +64,7 @@ function App() {
               &times;
             </a>
             <div className="content">
-              <form onSubmit={(e) => handleChange(e)} id="add-channel-form">
+              <form onSubmit={(e) => handleSubmit(e)} id="add-channel-form">
                 <input
                   name="channel"
                   className="form-control"
@@ -56,9 +72,15 @@ function App() {
                   placeholder="Channel Name"
                   maxLength="10"
                   required
+                  onChange={(e) => handleChange(e)}
                 />
 
-                <select name="private" className="form-control" required>
+                <select
+                  name="private"
+                  className="form-control"
+                  required
+                  onChange={(e) => handleChange(e)}
+                >
                   <option value={false}>Select Privacy</option>
                   <option value={false}>Public</option>
                   <option value={true}>Private</option>

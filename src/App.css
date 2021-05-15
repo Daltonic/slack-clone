@@ -88,6 +88,12 @@ body {
   cursor: pointer;
 }
 
+#add-channel-form > .form-btn:hover {
+  color: white;
+  background-color: var(--slack-color);
+  transition: all 0.3s ease-in-out;
+}
+
 #add-channel-form > .form-control,
 #add-channel-form > .form-btn:focus {
   outline: none;

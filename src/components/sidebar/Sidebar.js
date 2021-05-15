@@ -54,50 +54,52 @@ function Sidebar() {
         </div>
         <CreateIcon />
       </div>
-      <SidebarOption Icon={InsertCommentIcon} title="Thread" />
-      <SidebarOption Icon={AlternateEmailIcon} title="Mentions & Reactions" />
-      <SidebarOption Icon={MoreVertIcon} title="More" />
-      <hr />
-      <SidebarOption Icon={ArrowDropDownIcon} title="Channels" />
-      <hr />
-      {channels.map((channel) =>
-        channel.private ? (
-          <SidebarOption
-            Icon={LockOutlinedIcon}
-            title={channel.name}
-            id={channel.id}
-            key={channel.id}
-            sub="sidebarOption__sub"
-          />
-        ) : (
-          <SidebarOption
-            title={channel.name}
-            id={channel.id}
-            key={channel.id}
-            sub="sidebarOption__sub"
-          />
-        )
-      )}
+      <div className="sidebar__options">
+        <SidebarOption Icon={InsertCommentIcon} title="Thread" />
+        <SidebarOption Icon={AlternateEmailIcon} title="Mentions & Reactions" />
+        <SidebarOption Icon={MoreVertIcon} title="More" />
+        <hr />
+        <SidebarOption Icon={ArrowDropDownIcon} title="Channels" />
+        <hr />
+        {channels.map((channel) =>
+          channel.private ? (
+            <SidebarOption
+              Icon={LockOutlinedIcon}
+              title={channel.name}
+              id={channel.id}
+              key={channel.id}
+              sub="sidebarOption__sub"
+            />
+          ) : (
+            <SidebarOption
+              title={channel.name}
+              id={channel.id}
+              key={channel.id}
+              sub="sidebarOption__sub"
+            />
+          )
+        )}
 
-      <SidebarOption
-        Icon={AddIcon}
-        title="Add Channel"
-        sub="sidebarOption__sub"
-        addChannelOption
-      />
-      <hr />
-      <SidebarOption Icon={ArrowDropDownIcon} title="Direct Messages" />
-      <hr />
-      {dms.map((dm) => (
         <SidebarOption
-          Icon={FiberManualRecordIcon}
-          title={dm.name}
-          id={dm.id}
-          key={dm.id}
-          sub="sidebarOption__sub sidebarOption__color"
-          user
+          Icon={AddIcon}
+          title="Add Channel"
+          sub="sidebarOption__sub"
+          addChannelOption
         />
-      ))}
+        <hr />
+        <SidebarOption Icon={ArrowDropDownIcon} title="Direct Messages" />
+        <hr />
+        {dms.map((dm) => (
+          <SidebarOption
+            Icon={FiberManualRecordIcon}
+            title={dm.name}
+            id={dm.id}
+            key={dm.id}
+            sub="sidebarOption__sub sidebarOption__color"
+            user
+          />
+        ))}
+      </div>
     </div>
   )
 }

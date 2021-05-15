@@ -45,8 +45,25 @@
   color: green;
 }
 
-.sidebar > hr {
-  margin-top: 10px;
-  margin-bottom: 10px;
+.sidebar__options {
+  overflow-y: auto;
+  height: calc(100vh - 140px);
+}
+
+.sidebar__options > hr {
   border: 1px solid #49274b;
+}
+
+.sidebar__options::-webkit-scrollbar {
+  width: 0.8em;
+}
+
+.sidebar__options::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.sidebar__options::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: none;
+  border-radius: 9px;
 }

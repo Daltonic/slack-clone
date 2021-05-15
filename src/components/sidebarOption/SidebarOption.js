@@ -1,6 +1,5 @@
 import './SidebarOption.css'
 import { useHistory } from 'react-router-dom'
-// import db from '../../firebase'
 
 function SidebarOption({ Icon, title, sub, id, addChannelOption, user }) {
   const history = useHistory()
@@ -17,14 +16,6 @@ function SidebarOption({ Icon, title, sub, id, addChannelOption, user }) {
   }
 
   const addChannel = () => {
-    // const channelName = prompt('Please enter a channel name')
-
-    // if (channelName) {
-    //   db.collection('/channels').add({
-    //     name: channelName,
-    //     private: false,
-    //   })
-    // }
     const modal = document.getElementById('popup1')
     modal.setAttribute('class', 'overlay overlay__show')
   }
