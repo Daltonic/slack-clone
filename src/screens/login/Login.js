@@ -1,7 +1,15 @@
 import './Login.css'
 import { Button } from '@material-ui/core'
+import { auth, provider } from '../../firebase'
 
 function Login() {
+  const signIn = () => {
+    auth
+      .signInWithPopup(provider)
+      .then((res) => console.log(res))
+      .catch((error) => alert(error.message))
+  }
+
   return (
     <div className="login">
       <div className="login__container">
@@ -12,7 +20,7 @@ function Login() {
 
         <h4>Sign in to CometChat</h4>
         <p>cometchat.slack.com</p>
-        <Button>Sign In With Google</Button>
+        <Button onClick={signIn}>Sign In With Google</Button>
       </div>
     </div>
   )
