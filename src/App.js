@@ -7,10 +7,11 @@ import User from './screens/user/User'
 import { useState } from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import db from './firebase'
+import { useStateValue } from './StateProvider'
 
 function App() {
   const [form, setForm] = useState({})
-  const [user, setUser] = useState(null)
+  const [{ user }, dispatch] = useStateValue()
 
   const toggleClose = (e) => {
     e.preventDefault()
