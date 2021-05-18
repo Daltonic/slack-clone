@@ -14,6 +14,7 @@ import { useHistory } from 'react-router-dom'
 
 function Sidebar() {
   const [channels, setChannels] = useState([])
+  const [user, setUser] = useState(null)
   const [dms, setDms] = useState([])
   const history = useHistory()
 
@@ -52,6 +53,9 @@ function Sidebar() {
   useEffect(() => {
     getChannels()
     getDirectMessages()
+
+    const data = localStorage.getItem('user')
+    setUser(JSON.parse(data))
   }, [])
 
   return (
@@ -61,7 +65,7 @@ function Sidebar() {
           <h2>Cometchat (e)</h2>
           <h3>
             <FiberManualRecordIcon />
-            Daltonic
+            {user?.displayName.split(' ')[0]}
           </h3>
         </div>
         <CreateIcon />
