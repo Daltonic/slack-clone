@@ -4,8 +4,6 @@ import './index.css'
 import App from './App'
 import { CometChat } from '@cometchat-pro/chat'
 import { cometChat } from './app.config'
-import { StateProvider } from './StateProvider'
-import reducer, { initialState } from './Reducer'
 
 const appID = cometChat.APP_ID
 const region = cometChat.APP_REGION
@@ -18,9 +16,7 @@ CometChat.init(appID, appSetting)
   .then(() => {
     ReactDOM.render(
       <React.StrictMode>
-        <StateProvider initialState={initialState} reducer={reducer}>
-          <App />
-        </StateProvider>
+        <App />
       </React.StrictMode>,
       document.getElementById('root')
     )

@@ -47,7 +47,8 @@
 
 .sidebar__options {
   overflow-y: auto;
-  height: calc(100vh - 140px);
+  height: calc(100vh - 170px);
+  min-height: calc(100vh - 150px);
 }
 
 .sidebar__options > hr {
@@ -67,3 +68,14 @@
   outline: none;
   border-radius: 9px;
 }
+
+.sidebar__logout {
+  width: 100%;
+  padding: 10px 0;
+  outline: none;
+  border: none;
+  background-color: #340e36;
+  color: white;
+  cursor: pointer;
+}
+

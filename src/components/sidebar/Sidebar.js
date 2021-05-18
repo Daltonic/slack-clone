@@ -1,6 +1,6 @@
 import './Sidebar.css'
 import { useState, useEffect } from 'react'
-import db from '../../firebase'
+import db, { auth } from '../../firebase'
 import SidebarOption from '../sidebarOption/SidebarOption'
 import CreateIcon from '@material-ui/icons/Create'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
@@ -10,10 +10,12 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import AddIcon from '@material-ui/icons/Add'
+import { useHistory } from 'react-router-dom'
 
 function Sidebar() {
   const [channels, setChannels] = useState([])
   const [dms, setDms] = useState([])
+  const history = useHistory()
 
   const getDirectMessages = () => {
     db.collection('dms').onSnapshot((snapshot) => {
@@ -35,6 +37,16 @@ function Sidebar() {
         }))
       )
     })
+  }
+
+  const logOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        localStorage.removeItem('user')
+        history.push('/login')
+      })
+      .catch((error) => console.log(error.message))
   }
 
   useEffect(() => {
@@ -100,6 +112,10 @@ function Sidebar() {
           />
         ))}
       </div>
+
+      <button className="sidebar__logout" onClick={logOut}>
+        Logout
+      </button>
     </div>
   )
 }

@@ -1,19 +1,17 @@
 import './Login.css'
 import { Button } from '@material-ui/core'
 import { auth, provider } from '../../firebase'
-import { useStateValue } from '../../StateProvider'
-import { actionTypes } from '../../Reducer'
+import { useHistory } from 'react-router-dom'
 
 function Login() {
-  const [state, dispatch] = useStateValue()
+  const history = useHistory()
+
   const signIn = () => {
     auth
       .signInWithPopup(provider)
       .then((res) => {
-        dispatch({
-          type: actionTypes.SET_USER,
-          user: res.user,
-        })
+        localStorage.setItem('user', JSON.stringify(res.user))
+        setTimeout(() => history.push('/'), 2000)
       })
       .catch((error) => alert(error.message))
   }
