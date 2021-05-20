@@ -41,10 +41,11 @@ function App() {
         name: form.channel,
         private: form.private === 'true',
       })
-      .then(() => {
+      .then((c) => {
         const modal = document.getElementById('add-channel-popup')
         modal.setAttribute('class', 'overlay')
         setForm({})
+        window.location.href = `/channels/${c.id}`
       })
   }
 

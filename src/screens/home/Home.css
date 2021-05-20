@@ -1,0 +1,44 @@
+.home {
+  flex: 0.7;
+  flex-grow: 1;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.home__container {
+  padding: 0 25%;
+  text-align: center;
+}
+
+.home__container > button {
+  margin-top: 30px;
+  text-transform: inherit !important;
+  background-color: #0a8d48;
+  color: white;
+}
+
+.home__container > button:hover {
+  background-color: transparent;
+  color: #0a8d48;
+  border: 1px solid #0a8d48;
+}
+
+.home__container > img {
+  object-fit: contain;
+  height: 100px;
+  margin-bottom: 40px;
+}
+
+.home__container > * {
+  margin-bottom: 1rem;
+}
+
+.home__container > h1 {
+  font-family: cursive;
+}
+
+.home__container > p {
+  font-size: 18px;
+  line-height: 1.5;
+}
