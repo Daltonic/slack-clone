@@ -35,11 +35,13 @@ function App() {
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    const user = JSON.parse(localStorage.getItem('user'))
 
     db.collection('/channels')
       .add({
         name: form.channel,
         private: form.private === 'true',
+        uid: user.uid
       })
       .then((c) => {
         const modal = document.getElementById('add-channel-popup')
