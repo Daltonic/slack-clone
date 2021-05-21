@@ -13,6 +13,7 @@ import {
   Redirect,
 } from 'react-router-dom'
 import db, { auth } from './firebase'
+import { CometChat } from '@cometchat-pro/chat'
 
 function App() {
   const [form, setForm] = useState({})
@@ -41,13 +42,38 @@ function App() {
       .add({
         name: form.channel,
         private: form.private === 'true',
-        uid: user.uid
+        uid: user.uid,
       })
       .then((c) => {
         const modal = document.getElementById('add-channel-popup')
+        const channel = {
+          groupName: form.channel,
+          guid: c.id,
+          private: form.private,
+        }
+
         modal.setAttribute('class', 'overlay')
+        cometChatCreateGroup(channel)
         setForm({})
         window.location.href = `/channels/${c.id}`
+      })
+  }
+
+  const cometChatCreateGroup = (data) => {
+    const GUID = data.guid
+    const groupName = data.groupName
+    const groupType =
+      Boolean(data.private) === false
+        ? CometChat.GROUP_TYPE.PUBLIC
+        : CometChat.GROUP_TYPE.PRIVATE
+    const password = ''
+
+    const group = new CometChat.Group(GUID, groupName, groupType, password)
+
+    CometChat.createGroup(group)
+      .then((group) => console.log('Group created successfully:', group))
+      .catch((error) => {
+        console.log('Group creation failed with exception:', error)
       })
   }
 

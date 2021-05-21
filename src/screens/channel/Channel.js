@@ -7,6 +7,7 @@ import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
 import LockIcon from '@material-ui/icons/Lock';
 import db from '../../firebase'
 import Message from '../../components/message/Message'
+import { CometChat } from '@cometchat-pro/chat';
 
 function Channel() {
   const { id } = useParams()
@@ -32,6 +33,24 @@ function Channel() {
           }))
         )
       })
+  }
+
+  const getMessages = (guid) => {
+    const limit = 50;
+
+    const messagesRequest = new CometChat.MessagesRequestBuilder()
+      .setLimit(limit)
+      .setGUID(guid)
+      .build();
+
+    messagesRequest
+      .fetchPrevious()
+      .then((messages) => {
+        this.messages = messages.filter((m) => m.type === 'text');
+      })
+      .catch((error) =>
+        console.log('Message fetching failed with error:', error)
+      );
   }
 
   // const scrollToEnd = () => {
