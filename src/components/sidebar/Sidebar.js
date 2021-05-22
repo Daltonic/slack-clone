@@ -78,7 +78,7 @@ function Sidebar() {
         <SidebarOption Icon={ArrowDropDownIcon} title="Channels" />
         <hr />
         {channels.map((channel) =>
-          channel.private ? (
+          channel.privacy ? (
             <SidebarOption
               Icon={LockOutlinedIcon}
               title={channel.name}

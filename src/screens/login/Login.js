@@ -1,13 +1,11 @@
 import './Login.css'
 import { Button } from '@material-ui/core'
 import { auth, provider } from '../../firebase'
-import { useHistory } from 'react-router-dom'
 import { CometChat } from '@cometchat-pro/chat'
 import { cometChat } from '../../app.config'
 import { useState } from 'react'
 
 function Login() {
-  const history = useHistory()
   const [loading, setLoading] = useState(false)
 
   const signIn = () => {
@@ -27,7 +25,7 @@ function Login() {
     CometChat.login(data.uid, authKey)
       .then((u) => {
         localStorage.setItem('user', JSON.stringify(data))
-        setTimeout(() => history.push('/'), 2000)
+        window.location.href = '/'
         console.log(u)
         setLoading(false)
       })
@@ -52,7 +50,7 @@ function Login() {
     CometChat.createUser(user, authKey)
       .then((u) => {
         localStorage.setItem('user', JSON.stringify(data))
-        setTimeout(() => history.push('/'), 2000)
+        window.location.href = '/'
         console.log(u)
         setLoading(false)
       })

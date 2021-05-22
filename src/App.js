@@ -16,56 +16,56 @@ import db, { auth } from './firebase'
 import { CometChat } from '@cometchat-pro/chat'
 
 function App() {
-  const [form, setForm] = useState({})
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [isLoaded, setIsLoaded] = useState(false)
+
+  const [channel, setChannel] = useState('')
+  const [privacy, setPrivacy] = useState('')
 
   const toggleClose = (e) => {
     e.preventDefault()
     const modal = document.getElementById('add-channel-popup')
     modal.setAttribute('class', 'overlay')
-    setForm({})
+    resetForm()
   }
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    })
+  const resetForm = () => {
+    setChannel('')
+    setChannel('')
   }
 
   const handleSubmit = (e) => {
     e.preventDefault()
+
     const user = JSON.parse(localStorage.getItem('user'))
 
     db.collection('/channels')
       .add({
-        name: form.channel,
-        private: form.private === 'true',
+        name: channel,
+        privacy: privacy === 'true',
         uid: user.uid,
       })
       .then((c) => {
         const modal = document.getElementById('add-channel-popup')
-        const channel = {
-          groupName: form.channel,
+        const details = {
+          channel,
+          privacy,
           guid: c.id,
-          private: form.private,
         }
 
         modal.setAttribute('class', 'overlay')
-        cometChatCreateGroup(channel)
-        setForm({})
-        window.location.href = `/channels/${c.id}`
+        cometChatCreateGroup(details)
+        resetForm()
       })
   }
 
   const cometChatCreateGroup = (data) => {
     const GUID = data.guid
-    const groupName = data.groupName
+    const groupName = data.channel
     const groupType =
-      Boolean(data.private) === false
+      Boolean(data.privacy) === false
         ? CometChat.GROUP_TYPE.PUBLIC
-        : CometChat.GROUP_TYPE.PRIVATE
+        : CometChat.GROUP_TYPE.privacy
     const password = ''
 
     const group = new CometChat.Group(GUID, groupName, groupType, password)
@@ -152,20 +152,20 @@ function App() {
                   className="form-control"
                   type="text"
                   placeholder="Channel Name"
-                  value={form?.channel || ''}
-                  maxLength="10"
+                  value={channel}
+                  maxLength="20"
                   required
-                  onChange={(e) => handleChange(e)}
+                  onChange={(e) => setChannel(e.target.value)}
                 />
 
                 <select
-                  name="private"
+                  name="privacy"
                   className="form-control"
-                  value={form?.private || ''}
+                  value={privacy}
                   required
-                  onChange={(e) => handleChange(e)}
+                  onChange={(e) => setPrivacy(e.target.value)}
                 >
-                  <option value={''}>Select Privacy</option>
+                  <option value={''}>Select privacy</option>
                   <option value={false}>Public</option>
                   <option value={true}>Private</option>
                 </select>

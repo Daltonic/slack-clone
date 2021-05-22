@@ -4,10 +4,10 @@ import { useParams } from 'react-router-dom'
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
-import LockIcon from '@material-ui/icons/Lock';
+import LockIcon from '@material-ui/icons/Lock'
 import db from '../../firebase'
 import Message from '../../components/message/Message'
-import { CometChat } from '@cometchat-pro/chat';
+import { CometChat } from '@cometchat-pro/chat'
 
 function Channel() {
   const { id } = useParams()
@@ -36,27 +36,32 @@ function Channel() {
   }
 
   const getMessages = (guid) => {
-    const limit = 50;
+    const limit = 50
 
     const messagesRequest = new CometChat.MessagesRequestBuilder()
       .setLimit(limit)
       .setGUID(guid)
-      .build();
+      .build()
 
     messagesRequest
       .fetchPrevious()
       .then((messages) => {
-        this.messages = messages.filter((m) => m.type === 'text');
+        this.messages = messages.filter((m) => m.type === 'text')
       })
       .catch((error) =>
         console.log('Message fetching failed with error:', error)
-      );
+      )
   }
 
   // const scrollToEnd = () => {
   //   const elmnt = document.getElementById('messages-container')
   //   elmnt.scrollTop = elmnt.scrollHeight
   // }
+
+  const sendMessage = (e) => {
+    e.preventDefault()
+    console.log(e.target.value)
+  }
 
   useEffect(() => {
     getChannel(id)
@@ -69,7 +74,7 @@ function Channel() {
         <div className="channel__headerLeft">
           <h4 className="channel__channelName">
             <strong>
-              {channel?.private ? <LockIcon /> : '#'}
+              {channel?.privacy ? <LockIcon /> : '#'}
               {channel?.name}
             </strong>
             <StarBorderOutlinedIcon />
@@ -92,6 +97,15 @@ function Channel() {
             key={message?.uid}
           />
         ))}
+      </div>
+
+      <div className="chatInput">
+        <form>
+          <input placeholder={`Message ${channel?.name.toLowerCase()}`} />
+          <button type="submit" onClick={(e) => sendMessage(e)}>
+            SEND
+          </button>
+        </form>
       </div>
     </div>
   )
