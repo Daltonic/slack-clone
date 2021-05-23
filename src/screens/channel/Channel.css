@@ -1,6 +1,16 @@
 .channel {
   flex: 0.7;
   flex-grow: 1;
+  display: flex;
+}
+
+.channel__chat {
+  flex: 1;
+}
+
+.channel__details {
+  flex: 0.4;
+  border-left: 1px solid lightgray;
 }
 
 .channel__header {
@@ -57,18 +67,16 @@
 }
 
 .channel__chatInput > form {
-  position: relative;
   display: flex;
   justify-content: center;
 }
 
 .channel__chatInput > form > input {
-  position: fixed;
-  bottom: 30px;
-  width: 69%;
+  width: 90%;
   border: 1px solid gray;
   border-radius: 3px;
   padding: 20px;
+  margin: 10px;
 }
 
 .channel__chatInput > form > input:focus {

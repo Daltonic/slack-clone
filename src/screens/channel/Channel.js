@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
+import CloseIcon from '@material-ui/icons/Close'
 import LockIcon from '@material-ui/icons/Lock'
 import Message from '../../components/message/Message'
 import { CometChat } from '@cometchat-pro/chat'
@@ -82,46 +83,61 @@ function Channel() {
 
   return (
     <div className="channel">
-      <div className="channel__header">
-        <div className="channel__headerLeft">
-          <h4 className="channel__channelName">
-            <strong>
-              {channel?.privacy ? <LockIcon /> : '#'}
-              {channel?.name}
-            </strong>
-            <StarBorderOutlinedIcon />
-          </h4>
+      <div className="channel__chat">
+        <div className="channel__header">
+          <div className="channel__headerLeft">
+            <h4 className="channel__channelName">
+              <strong>
+                {channel?.privacy ? <LockIcon /> : '#'}
+                {channel?.name}
+              </strong>
+              <StarBorderOutlinedIcon />
+            </h4>
+          </div>
+          <div className="channel__headerRight">
+            <PersonAddOutlinedIcon />
+            <InfoOutlinedIcon />
+          </div>
         </div>
-        <div className="channel__headerRight">
-          <PersonAddOutlinedIcon />
-          <InfoOutlinedIcon />
+
+        <div id="messages-container" className="channel__messages">
+          {messages.map((message) => (
+            <Message
+              uid={message?.uid}
+              name={message.sender?.name}
+              avatar={message.sender?.avatar}
+              message={message?.text}
+              timestamp={new Date(message?.timestamp).toJSON()}
+              key={message?.sentAt}
+            />
+          ))}
+        </div>
+
+        <div className="channel__chatInput">
+          <form>
+            <input
+              placeholder={`Message ${channel?.name.toLowerCase()}`}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            />
+            <button type="submit" onClick={(e) => onSubmit(e)}>
+              SEND
+            </button>
+          </form>
         </div>
       </div>
 
-      <div id="messages-container" className="channel__messages">
-        {messages.map((message) => (
-          <Message
-            uid={message?.uid}
-            name={message.sender?.name}
-            avatar={message.sender?.avatar}
-            message={message?.text}
-            timestamp={new Date(message?.timestamp).toJSON()}
-            key={message?.sentAt}
-          />
-        ))}
-      </div>
-
-      <div className="channel__chatInput">
-        <form>
-          <input
-            placeholder={`Message ${channel?.name.toLowerCase()}`}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-          />
-          <button type="submit" onClick={(e) => onSubmit(e)}>
-            SEND
-          </button>
-        </form>
+      <div className="channel__details">
+        <div className="channel__header">
+          <div className="channel__headerLeft">
+            <h4 className="channel__channelName">
+              <strong>Details</strong>
+            </h4>
+          </div>
+          <div className="channel__headerRight">
+            <CloseIcon />
+          </div>
+        </div>
       </div>
     </div>
   )
