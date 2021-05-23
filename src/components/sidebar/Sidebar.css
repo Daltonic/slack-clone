@@ -29,6 +29,12 @@
   font-size: 15px;
   font-weight: 900;
   margin-bottom: 5px;
+  cursor: pointer;
+}
+
+.sidebar__info > h2 > a {
+  text-decoration: none;
+  color: white;
 }
 
 .sidebar__info > h3 {

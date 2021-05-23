@@ -11,7 +11,7 @@ function Home() {
     <div className="home">
       <div className="home__container">
         <img
-          src="http://assets.stickpng.com/images/5cb480cd5f1b6d3fbadece79.png"
+          src="/logo.png"
           alt="Slack Logo"
         />
         <h1>Welcome to Slack</h1>

@@ -42,7 +42,7 @@ function App() {
     db.collection('/channels')
       .add({
         name: channel,
-        privacy: privacy === 'true',
+        privacy,
         uid: user.uid,
       })
       .then((c) => {
@@ -63,9 +63,9 @@ function App() {
     const GUID = data.guid
     const groupName = data.channel
     const groupType =
-      Boolean(data.privacy) === false
+    data.privacy
         ? CometChat.GROUP_TYPE.PUBLIC
-        : CometChat.GROUP_TYPE.privacy
+        : CometChat.GROUP_TYPE.PRIVATE
     const password = ''
 
     const group = new CometChat.Group(GUID, groupName, groupType, password)
@@ -163,7 +163,7 @@ function App() {
                   className="form-control"
                   value={privacy}
                   required
-                  onChange={(e) => setPrivacy(e.target.value)}
+                  onChange={(e) => setPrivacy(e.target.value === 'true')}
                 >
                   <option value={''}>Select privacy</option>
                   <option value={false}>Public</option>

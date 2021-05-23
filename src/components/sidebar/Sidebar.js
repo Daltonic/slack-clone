@@ -10,7 +10,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import AddIcon from '@material-ui/icons/Add'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 function Sidebar() {
   const [channels, setChannels] = useState([])
@@ -62,7 +62,9 @@ function Sidebar() {
     <div className="sidebar">
       <div className="sidebar__header">
         <div className="sidebar__info">
-          <h2>Cometchat (e)</h2>
+          <h2>
+            <Link to="/">Cometchat (e)</Link>
+          </h2>
           <h3>
             <FiberManualRecordIcon />
             {user?.displayName.split(' ')[0]}

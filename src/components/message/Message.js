@@ -3,20 +3,19 @@ import { useState } from 'react'
 import { Avatar } from '@material-ui/core'
 import DeleteOutlinedIcon from '@material-ui/icons/DeleteOutlined'
 import EditOutlinedIcon from '@material-ui/icons/EditOutlined'
+import Moment from 'react-moment'
 
 function Message({ uid, name, avatar, message, timestamp }) {
   const [hovered, setHovered] = useState(false)
   const toggleHover = () => setHovered(!hovered)
 
-  const toReadableString = (time) => {
-    if (time < 0) time = 0
-    let hrs = ~~((time / 3600) % 24),
-      mins = ~~((time % 3600) / 60),
-      timeType = hrs > 11 ? 'PM' : 'AM'
-    if (hrs > 12) hrs = hrs - 12
-    if (hrs === 0) hrs = 12
-    if (mins < 10) mins = '0' + mins
-    return hrs + ':' + mins + timeType
+  const toReadableString = (timestamp) => {
+    const hours = timestamp.getHours()
+    const minutes = '0' + timestamp.getMinutes()
+    const seconds = '0' + timestamp.getSeconds()
+
+    // Will display time in 10:30:23 format
+    return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2)
   }
 
   return (
@@ -36,7 +35,9 @@ function Message({ uid, name, avatar, message, timestamp }) {
         <div className="message__right">
           <div className="message__details">
             <a href={`/users/${uid}`}>{name}</a>
-            <small>{toReadableString(new Date(timestamp.toDate()))}</small>
+            <small>
+              <Moment date={timestamp} format="hh:mm A" />
+            </small>
           </div>
           <p className="message__text">{message}</p>
         </div>

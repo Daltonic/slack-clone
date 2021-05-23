@@ -13,6 +13,7 @@ function Channel() {
   const { id } = useParams()
   const [channel, setChannel] = useState(null)
   const [messages, setMessages] = useState([])
+  const [message, setMessage] = useState('')
 
   const getChannel = (id) => {
     db.collection('channels')
@@ -45,27 +46,50 @@ function Channel() {
 
     messagesRequest
       .fetchPrevious()
-      .then((messages) => {
-        this.messages = messages.filter((m) => m.type === 'text')
+      .then((msgs) => {
+        setMessages(msgs.filter((m) => m.type === 'text'))
       })
       .catch((error) =>
         console.log('Message fetching failed with error:', error)
       )
   }
 
-  // const scrollToEnd = () => {
-  //   const elmnt = document.getElementById('messages-container')
-  //   elmnt.scrollTop = elmnt.scrollHeight
-  // }
+  const scrollToEnd = () => {
+    const elmnt = document.getElementById('messages-container')
+    elmnt.scrollTop = elmnt.scrollHeight
+  }
 
-  const sendMessage = (e) => {
+  const onSubmit = (e) => {
     e.preventDefault()
-    console.log(e.target.value)
+    sendMessage(id, message)
+  }
+
+  const sendMessage = (guid, message) => {
+    const receiverID = guid
+    const messageText = message
+    const receiverType = CometChat.RECEIVER_TYPE.GROUP
+    const textMessage = new CometChat.TextMessage(
+      receiverID,
+      messageText,
+      receiverType
+    )
+
+    CometChat.sendMessage(textMessage)
+      .then((message) => {
+        console.log(message)
+        messages.push(message)
+        scrollToEnd()
+        setMessage('')
+      })
+      .catch((error) =>
+        console.log('Message sending failed with error:', error)
+      )
   }
 
   useEffect(() => {
     getChannel(id)
     getChannelMessages(id)
+    getMessages(id)
   }, [id])
 
   return (
@@ -90,19 +114,22 @@ function Channel() {
         {messages.map((message) => (
           <Message
             uid={message?.uid}
-            name={message?.name}
-            avatar={message?.avatar}
-            message={message?.message}
-            timestamp={message?.timestamp}
-            key={message?.uid}
+            name={message.sender?.name}
+            avatar={message.sender?.avatar}
+            message={message?.text}
+            timestamp={new Date(message?.timestamp).toJSON()}
+            key={message?.sentAt}
           />
         ))}
       </div>
 
       <div className="chatInput">
         <form>
-          <input placeholder={`Message ${channel?.name.toLowerCase()}`} />
-          <button type="submit" onClick={(e) => sendMessage(e)}>
+          <input
+            placeholder={`Message ${channel?.name.toLowerCase()}`}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <button type="submit" onClick={(e) => onSubmit(e)}>
             SEND
           </button>
         </form>
