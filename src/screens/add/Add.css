@@ -1,0 +1,82 @@
+.add {
+  flex: 0.7;
+  flex-grow: 1;
+  height: 100vh;
+  display: grid;
+  place-items: center;
+}
+
+.add__container {
+  padding: 0 25%;
+  text-align: center;
+}
+
+.add__container > button {
+  margin-top: 20px;
+  text-transform: inherit !important;
+  background-color: #0a8d48;
+  color: white;
+  border: 1px solid #0a8d48;
+}
+
+.add__container > button:hover {
+  background-color: transparent;
+  color: #0a8d48;
+}
+
+.add__container > img {
+  object-fit: contain;
+  height: 100px;
+  margin-bottom: 40px;
+}
+
+.add__form > input {
+  width: 90%;
+}
+
+.add__form > input:focus {
+  outline: none;
+}
+
+.add__form > select {
+  width: 98%;
+}
+
+.add__form {
+  margin: 10px 0;
+}
+
+.add__form > * {
+  margin-bottom: 10px;
+  padding: 10px;
+  color: gray;
+  border-radius: 9px;
+  border: 1px solid gray;
+}
+
+#loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgb(255 255 255);
+  border-radius: 50%;
+  border-top-color: #0a8d48;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+#loading:hover {
+  border: 3px solid #0a8d48;
+  border-top-color: rgb(255 255 255);
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}

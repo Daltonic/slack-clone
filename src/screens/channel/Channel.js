@@ -10,6 +10,7 @@ import { CometChat } from '@cometchat-pro/chat'
 
 function Channel() {
   const { id } = useParams()
+  const [user, setUser] = useState(null)
   const [channel, setChannel] = useState(null)
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
@@ -39,23 +40,6 @@ function Channel() {
       .catch((error) =>
         console.log('Message fetching failed with error:', error)
       )
-  }
-
-  const addMember = (guid, privacy) => {
-    const GUID = guid
-    const groupType = privacy
-      ? CometChat.GROUP_TYPE.PUBLIC
-      : CometChat.GROUP_TYPE.PRIVATE
-    const password = ''
-
-    CometChat.joinGroup(GUID, groupType, password)
-      .then((group) => {
-        console.log('Channel joined successfully:', group)
-      })
-      .catch((error) => {
-        if (error.code !== 'ERR_ALREADY_JOINED')
-          console.log('Group joining failed with exception:', error)
-      })
   }
 
   const scrollToEnd = () => {
@@ -92,6 +76,8 @@ function Channel() {
   useEffect(() => {
     getChannel(id)
     getMessages(id)
+
+    setUser(JSON.parse(localStorage.getItem('user')))
   }, [id])
 
   return (
