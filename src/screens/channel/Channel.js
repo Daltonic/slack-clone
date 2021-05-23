@@ -5,7 +5,6 @@ import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
 import LockIcon from '@material-ui/icons/Lock'
-import db from '../../firebase'
 import Message from '../../components/message/Message'
 import { CometChat } from '@cometchat-pro/chat'
 
@@ -15,24 +14,11 @@ function Channel() {
   const [messages, setMessages] = useState([])
   const [message, setMessage] = useState('')
 
-  const getChannel = (id) => {
-    db.collection('channels')
-      .doc(id)
-      .onSnapshot((snapshot) => {
-        setChannel(snapshot.data())
-      })
-  }
-
-  const getChannelMessages = (id) => {
-    db.collection(`channels/${id}/messages`)
-      .orderBy('timestamp', 'asc')
-      .onSnapshot((snapshot) => {
-        setMessages(
-          snapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }))
-        )
+  const getChannel = (guid) => {
+    CometChat.getGroup(guid)
+      .then((group) => setChannel(group))
+      .catch((error) => {
+        console.log('Group details fetching failed with exception:', error)
       })
   }
 
@@ -48,10 +34,28 @@ function Channel() {
       .fetchPrevious()
       .then((msgs) => {
         setMessages(msgs.filter((m) => m.type === 'text'))
+        scrollToEnd()
       })
       .catch((error) =>
         console.log('Message fetching failed with error:', error)
       )
+  }
+
+  const addMember = (guid, privacy) => {
+    const GUID = guid
+    const groupType = privacy
+      ? CometChat.GROUP_TYPE.PUBLIC
+      : CometChat.GROUP_TYPE.PRIVATE
+    const password = ''
+
+    CometChat.joinGroup(GUID, groupType, password)
+      .then((group) => {
+        console.log('Channel joined successfully:', group)
+      })
+      .catch((error) => {
+        if (error.code !== 'ERR_ALREADY_JOINED')
+          console.log('Group joining failed with exception:', error)
+      })
   }
 
   const scrollToEnd = () => {
@@ -76,10 +80,9 @@ function Channel() {
 
     CometChat.sendMessage(textMessage)
       .then((message) => {
-        console.log(message)
         messages.push(message)
-        scrollToEnd()
         setMessage('')
+        scrollToEnd()
       })
       .catch((error) =>
         console.log('Message sending failed with error:', error)
@@ -88,7 +91,6 @@ function Channel() {
 
   useEffect(() => {
     getChannel(id)
-    getChannelMessages(id)
     getMessages(id)
   }, [id])
 
@@ -123,10 +125,11 @@ function Channel() {
         ))}
       </div>
 
-      <div className="chatInput">
+      <div className="channel__chatInput">
         <form>
           <input
             placeholder={`Message ${channel?.name.toLowerCase()}`}
+            value={message}
             onChange={(e) => setMessage(e.target.value)}
           />
           <button type="submit" onClick={(e) => onSubmit(e)}>

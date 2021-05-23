@@ -9,15 +9,6 @@ function Message({ uid, name, avatar, message, timestamp }) {
   const [hovered, setHovered] = useState(false)
   const toggleHover = () => setHovered(!hovered)
 
-  const toReadableString = (timestamp) => {
-    const hours = timestamp.getHours()
-    const minutes = '0' + timestamp.getMinutes()
-    const seconds = '0' + timestamp.getSeconds()
-
-    // Will display time in 10:30:23 format
-    return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2)
-  }
-
   return (
     <div
       className="message"

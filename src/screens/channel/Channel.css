@@ -1,8 +1,6 @@
 .channel {
   flex: 0.7;
   flex-grow: 1;
-  overflow-y: auto;
-  padding-bottom: 150px;
 }
 
 .channel__header {
@@ -11,6 +9,11 @@
   justify-content: space-between;
   padding: 20px;
   border-bottom: 1px solid lightgray;
+}
+
+.channel__messages {
+  overflow-y: auto;
+  height: calc(100vh - 35%);
 }
 
 .channel__channelName {
@@ -47,4 +50,45 @@
 .channel__headerRight > .MuiSvgIcon-root:hover {
   transform: scale(1.3);
   transition: all 0.3s ease-in-out;
+}
+
+.channel__chatInput {
+  border-radius: 20px;
+}
+
+.channel__chatInput > form {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.channel__chatInput > form > input {
+  position: fixed;
+  bottom: 30px;
+  width: 69%;
+  border: 1px solid gray;
+  border-radius: 3px;
+  padding: 20px;
+}
+
+.channel__chatInput > form > input:focus {
+  outline: none;
+}
+
+.channel__chatInput > form > button {
+  display: none !important;
+}
+
+.channel__messages::-webkit-scrollbar {
+  width: 0.8em;
+}
+
+.channel__messages::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+.channel__messages::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: none;
+  border-radius: 9px;
 }
