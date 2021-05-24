@@ -1,6 +1,6 @@
 import './Channel.css'
 import { useState, useEffect } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useHistory } from 'react-router-dom'
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
@@ -13,18 +13,52 @@ import LockIcon from '@material-ui/icons/Lock'
 import Message from '../../components/message/Message'
 import { CometChat } from '@cometchat-pro/chat'
 import { Avatar } from '@material-ui/core'
+import { Button } from '@material-ui/core'
 
 function Channel() {
   const { id } = useParams()
+  const history = useHistory()
   const [user, setUser] = useState(null)
   const [channel, setChannel] = useState(null)
   const [messages, setMessages] = useState([])
   const [members, setMembers] = useState([])
+  const [users, setUsers] = useState([])
+  const [keyword, setKeyword] = useState(null)
   const [message, setMessage] = useState('')
+  const [searching, setSearching] = useState(false)
   const [toggle, setToggle] = useState(false)
+  const [toggleAdd, setToggleAdd] = useState(false)
 
-  const toggleDetail = () => {
+  const togglerDetail = () => {
     setToggle(!toggle)
+  }
+
+  const togglerAdd = () => {
+    setToggleAdd(!toggleAdd)
+  }
+
+  const findUser = () => {
+    findMember(keyword)
+  }
+
+  const findMember = (keyword) => {
+    setSearching(true)
+    const limit = 30
+    const usersRequest = new CometChat.UsersRequestBuilder()
+      .setLimit(limit)
+      .setSearchKeyword(keyword)
+      .build()
+
+    usersRequest
+      .fetchNext()
+      .then((userList) => {
+        setUsers(userList)
+        setSearching(false)
+      })
+      .catch((error) => {
+        console.log('User list fetching failed with error:', error)
+        setSearching(false)
+      })
   }
 
   const getMembers = (guid) => {
@@ -46,6 +80,7 @@ function Channel() {
     CometChat.getGroup(guid)
       .then((group) => setChannel(group))
       .catch((error) => {
+        if (error.code === 'ERR_GUID_NOT_FOUND') history.push('/')
         console.log('Group details fetching failed with exception:', error)
       })
   }
@@ -115,15 +150,15 @@ function Channel() {
           <div className="channel__headerLeft">
             <h4 className="channel__channelName">
               <strong>
-                {channel?.privacy ? <LockIcon /> : '#'}
+                {channel?.type === 'private' ? <LockIcon /> : '#'}
                 {channel?.name}
               </strong>
               <StarBorderOutlinedIcon />
             </h4>
           </div>
           <div className="channel__headerRight">
-            <PersonAddOutlinedIcon />
-            <InfoOutlinedIcon onClick={toggleDetail} />
+            <PersonAddOutlinedIcon onClick={togglerAdd} />
+            <InfoOutlinedIcon onClick={togglerDetail} />
           </div>
         </div>
 
@@ -162,7 +197,7 @@ function Channel() {
             </h4>
           </div>
           <div className="channel__headerRight">
-            <CloseIcon onClick={toggleDetail} />
+            <CloseIcon onClick={togglerDetail} />
           </div>
         </div>
         <div className="channel__detailsBody">
@@ -186,13 +221,56 @@ function Channel() {
           </div>
           <hr />
           <div className="channel__detailsMembers">
+          <h4>Members({members.length})</h4>
             {members.map((member) => (
               <Link
+                key={member?.uid}
                 to={`/users/${member?.uid}`}
                 className={member?.status === 'online' ? 'isOnline' : ''}
               >
                 <Avatar src={member?.avatar} alt={member?.name} />
                 {member?.name}
+                <FiberManualRecordIcon />
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className={`channel__details ${!toggleAdd ? 'hide__details' : ''}`}>
+        <div className="channel__header">
+          <div className="channel__headerLeft">
+            <h4 className="channel__channelName">
+              <strong>Add Member</strong>
+            </h4>
+          </div>
+          <div className="channel__headerRight">
+            <CloseIcon onClick={togglerAdd} />
+          </div>
+        </div>
+        <div className="channel__detailsBody">
+          <form className="channel__detailsForm">
+            <input
+              type="search"
+              placeholder="Search for a user"
+              onChange={(e) => setKeyword(e.target.value)}
+              required
+            />
+            <Button onClick={findUser}>
+              {!searching ? 'Find' : <div id="loading"></div>}
+            </Button>
+          </form>
+          <hr />
+          <div className="channel__detailsMembers">
+            <h4>Search Result({users.length})</h4>
+            {users.map((user) => (
+              <Link
+                key={user?.uid}
+                to={`/users/${user?.uid}`}
+                className={user?.status === 'online' ? 'isOnline' : ''}
+              >
+                <Avatar src={user?.avatar} alt={user?.name} />
+                {user?.name}
                 <FiberManualRecordIcon />
               </Link>
             ))}

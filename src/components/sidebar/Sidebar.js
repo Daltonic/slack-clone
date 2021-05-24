@@ -10,6 +10,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown'
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
 import AddIcon from '@material-ui/icons/Add'
+import { CometChat } from '@cometchat-pro/chat'
 import { Link, useHistory } from 'react-router-dom'
 
 function Sidebar() {
@@ -30,15 +31,31 @@ function Sidebar() {
   }
 
   const getChannels = () => {
-    db.collection('channels').onSnapshot((snapshot) => {
-      setChannels(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-      )
-    })
+    const limit = 30
+    const groupsRequest = new CometChat.GroupsRequestBuilder()
+      .setLimit(limit)
+      .joinedOnly(true)
+      .build()
+
+    groupsRequest
+      .fetchNext()
+      .then((groupList) => setChannels(groupList))
+      .catch((error) => {
+        console.log('Groups list fetching failed with error', error)
+      })
   }
+
+  // const getChannels = () => {
+  //   const data = JSON.parse(localStorage.getItem('user'))
+  //   db.collection('channels')
+  //     .where('uid', '==', data.uid)
+  //     .get()
+  //     .then((snapshot) => {
+  //       snapshot.forEach((doc) => {
+  //         channels.push({ ...doc.data(), id: doc.id })
+  //       })
+  //     })
+  // }
 
   const logOut = () => {
     auth
@@ -51,11 +68,11 @@ function Sidebar() {
   }
 
   useEffect(() => {
-    getChannels()
-    getDirectMessages()
-
     const data = localStorage.getItem('user')
     setUser(JSON.parse(data))
+
+    getChannels()
+    getDirectMessages()
   }, [])
 
   return (
@@ -80,19 +97,19 @@ function Sidebar() {
         <SidebarOption Icon={ArrowDropDownIcon} title="Channels" />
         <hr />
         {channels.map((channel) =>
-          channel.privacy ? (
+          channel.type === 'private' ? (
             <SidebarOption
               Icon={LockOutlinedIcon}
               title={channel.name}
-              id={channel.id}
-              key={channel.id}
+              id={channel.guid}
+              key={channel.guid}
               sub="sidebarOption__sub"
             />
           ) : (
             <SidebarOption
               title={channel.name}
-              id={channel.id}
-              key={channel.id}
+              id={channel.guid}
+              key={channel.guid}
               sub="sidebarOption__sub"
             />
           )

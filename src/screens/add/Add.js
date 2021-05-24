@@ -1,15 +1,12 @@
 import './Add.css'
 import { Button } from '@material-ui/core'
 import { useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import db from '../../firebase'
 import { CometChat } from '@cometchat-pro/chat'
 
 function Add() {
   const [channel, setChannel] = useState('')
   const [privacy, setPrivacy] = useState('')
   const [loading, setLoading] = useState(false)
-  const history = useHistory()
 
   const addChannel = () => {
     setLoading(true)
@@ -18,21 +15,12 @@ function Add() {
       alert('Please fill the form completely')
       return null
     }
-    const user = JSON.parse(localStorage.getItem('user'))
 
-    db.collection('/channels')
-      .add({
-        name: channel,
-        privacy,
-        uid: user.uid,
-      })
-      .then((c) => {
-        cometChatCreateGroup({
-          channel,
-          privacy,
-          guid: c.id,
-        })
-      })
+    cometChatCreateGroup({
+      channel,
+      privacy,
+      guid: generateGUID(),
+    })
   }
 
   const cometChatCreateGroup = (data) => {
@@ -49,13 +37,26 @@ function Add() {
       .then((group) => {
         console.log('Group created successfully:', group)
         resetForm()
-        history.push(`/channels/${data.guid}`)
+        window.location.href = `/channels/${data.guid}`
         setLoading(false)
       })
       .catch((error) => {
         console.log('Group creation failed with exception:', error)
         setLoading(false)
       })
+  }
+
+  const generateGUID = (length = 20) => {
+    var result = []
+    var characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    var charactersLength = characters.length
+    for (var i = 0; i < length; i++) {
+      result.push(
+        characters.charAt(Math.floor(Math.random() * charactersLength))
+      )
+    }
+    return result.join('')
   }
 
   const resetForm = () => {
@@ -82,7 +83,7 @@ function Add() {
           <select
             name="privacy"
             value={privacy}
-            onChange={(e) => setPrivacy(e.target.value === 'true')}
+            onChange={(e) => setPrivacy(e.target.value === true)}
             required
           >
             <option value={''}>Select privacy</option>

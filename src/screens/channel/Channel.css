@@ -162,6 +162,65 @@
   margin-top: 3px;
 }
 
+.channel__detailsMembers > h4 {
+  font-weight: 500;
+  margin-bottom: 20px;
+}
+
 .isOnline > .MuiSvgIcon-root {
   color: green;
+}
+
+.channel__detailsForm {
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.channel__detailsForm > button {
+  text-transform: inherit !important;
+  background-color: #0a8d48;
+  color: white;
+  border: 1px solid #0a8d48;
+  line-height: 1.13;
+  border-radius: 9px;
+}
+
+.channel__detailsForm > button:hover {
+  background-color: transparent;
+  color: #0a8d48;
+}
+
+.channel__detailsForm > input {
+  padding: 5px;
+  border: 1px solid lightgray;
+  border-radius: 9px;
+}
+
+#loading {
+  display: inline-block;
+  width: 8px !important;
+  height: 8px !important;
+  border: 3px solid rgb(255 255 255);
+  border-radius: 50%;
+  border-top-color: #0a8d48;
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+
+#loading:hover {
+  border: 3px solid #0a8d48;
+  border-top-color: rgb(255 255 255);
+}
+
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
 }
