@@ -13,6 +13,10 @@
   border-left: 1px solid lightgray;
 }
 
+.hide__details {
+  display: none;
+}
+
 .channel__header {
   display: flex;
   align-items: center;
@@ -99,4 +103,65 @@
   background-color: darkgrey;
   outline: none;
   border-radius: 9px;
+}
+
+.channel__detailsActions {
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.channel__detailsActions > span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.channel__detailsActions .MuiSvgIcon-root {
+  background-color: whitesmoke;
+  padding: 10px;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.channel__detailsActions > .MuiSvgIcon-root:hover {
+  background-color: lightgray;
+}
+
+.channel__detailsBody > hr {
+  border: none;
+  border-bottom: 1px solid lightgray;
+}
+
+.channel__detailsMembers {
+  margin: 30px;
+}
+
+.channel__detailsMembers > a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: black;
+}
+
+.channel__detailsMembers > a > .MuiAvatar-root {
+  border-radius: 9px;
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+}
+
+.channel__detailsMembers > a > .MuiSvgIcon-root {
+  font-size: 14px;
+  margin-left: 10px;
+  margin-top: 3px;
+}
+
+.isOnline > .MuiSvgIcon-root {
+  color: green;
 }
