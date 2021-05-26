@@ -48,11 +48,9 @@ function Login() {
     user.setAvatar(data.photoURL)
 
     CometChat.createUser(user, authKey)
-      .then((u) => {
-        localStorage.setItem('user', JSON.stringify(data))
-        window.location.href = '/'
-        console.log(u)
+      .then(() => {
         setLoading(false)
+        alert('You are now signed up, click the button again to login')
       })
       .catch((error) => {
         console.log(error)

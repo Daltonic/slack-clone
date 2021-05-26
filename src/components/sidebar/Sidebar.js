@@ -30,6 +30,23 @@ function Sidebar() {
     })
   }
 
+  const getDirectMessagesTest = () => {
+    const limit = 10
+    const usersRequest = new CometChat.UsersRequestBuilder()
+      .setLimit(limit)
+      // .friendsOnly(true)
+      .build()
+
+    usersRequest
+      .fetchNext()
+      .then((userList) => {
+        console.log('User list received:', userList)
+      })
+      .catch((error) => {
+        console.log('User list fetching failed with error:', error)
+      })
+  }
+
   const getChannels = () => {
     const limit = 30
     const groupsRequest = new CometChat.GroupsRequestBuilder()
@@ -44,18 +61,6 @@ function Sidebar() {
         console.log('Groups list fetching failed with error', error)
       })
   }
-
-  // const getChannels = () => {
-  //   const data = JSON.parse(localStorage.getItem('user'))
-  //   db.collection('channels')
-  //     .where('uid', '==', data.uid)
-  //     .get()
-  //     .then((snapshot) => {
-  //       snapshot.forEach((doc) => {
-  //         channels.push({ ...doc.data(), id: doc.id })
-  //       })
-  //     })
-  // }
 
   const logOut = () => {
     auth
@@ -73,6 +78,7 @@ function Sidebar() {
 
     getChannels()
     getDirectMessages()
+    // getDirectMessagesTest()
   }, [])
 
   return (

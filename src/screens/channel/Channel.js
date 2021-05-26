@@ -12,8 +12,7 @@ import CloseIcon from '@material-ui/icons/Close'
 import LockIcon from '@material-ui/icons/Lock'
 import Message from '../../components/message/Message'
 import { CometChat } from '@cometchat-pro/chat'
-import { Avatar } from '@material-ui/core'
-import { Button } from '@material-ui/core'
+import { Avatar, Button } from '@material-ui/core'
 
 function Channel() {
   const { id } = useParams()
@@ -38,10 +37,10 @@ function Channel() {
   }
 
   const findUser = () => {
-    findMember(keyword)
+    searchTerm(keyword)
   }
 
-  const findMember = (keyword) => {
+  const searchTerm = (keyword) => {
     setSearching(true)
     const limit = 30
     const usersRequest = new CometChat.UsersRequestBuilder()
