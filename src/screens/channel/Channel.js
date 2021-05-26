@@ -4,6 +4,7 @@ import { Link, useParams, useHistory } from 'react-router-dom'
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
+import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled'
 import CallIcon from '@material-ui/icons/Call'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import SearchIcon from '@material-ui/icons/Search'
@@ -17,12 +18,12 @@ import { Avatar, Button } from '@material-ui/core'
 function Channel() {
   const { id } = useParams()
   const history = useHistory()
-  const [user, setUser] = useState(null)
   const [channel, setChannel] = useState(null)
   const [messages, setMessages] = useState([])
   const [members, setMembers] = useState([])
   const [users, setUsers] = useState([])
   const [keyword, setKeyword] = useState(null)
+  const [currentUser, setCurrentUser] = useState(null)
   const [message, setMessage] = useState('')
   const [searching, setSearching] = useState(false)
   const [toggle, setToggle] = useState(false)
@@ -36,7 +37,9 @@ function Channel() {
     setToggleAdd(!toggleAdd)
   }
 
-  const findUser = () => {
+  const findUser = (e) => {
+    e.preventDefault()
+
     searchTerm(keyword)
   }
 
@@ -84,6 +87,18 @@ function Channel() {
       })
   }
 
+  const listenForMessage = (listenerID) => {
+    CometChat.addMessageListener(
+      listenerID,
+      new CometChat.MessageListener({
+        onTextMessageReceived: (message) => {
+          setMessages((prevState) => [...prevState, message])
+          scrollToEnd()
+        },
+      })
+    )
+  }
+
   const getMessages = (guid) => {
     const limit = 50
 
@@ -125,7 +140,7 @@ function Channel() {
 
     CometChat.sendMessage(textMessage)
       .then((message) => {
-        messages.push(message)
+        setMessages((prevState) => [...prevState, message])
         setMessage('')
         scrollToEnd()
       })
@@ -134,12 +149,26 @@ function Channel() {
       )
   }
 
+  const addMember = (guid, uid) => {
+    let GUID = guid
+    let membersList = [
+      new CometChat.GroupMember(uid, CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT),
+    ]
+
+    CometChat.addMembersToGroup(GUID, membersList, [])
+      .then((member) => setMembers((prevState) => [...prevState, member]))
+      .catch((error) => {
+        console.log('Something went wrong', error)
+      })
+  }
+
   useEffect(() => {
     getChannel(id)
     getMessages(id)
     getMembers(id)
+    listenForMessage(id)
 
-    setUser(JSON.parse(localStorage.getItem('user')))
+    setCurrentUser(JSON.parse(localStorage.getItem('user')))
   }, [id])
 
   return (
@@ -164,11 +193,11 @@ function Channel() {
         <div id="messages-container" className="channel__messages">
           {messages.map((message) => (
             <Message
-              uid={message?.uid}
+              uid={message?.sender.uid}
               name={message.sender?.name}
               avatar={message.sender?.avatar}
               message={message?.text}
-              timestamp={new Date(message?.timestamp).toJSON()}
+              timestamp={message?.sentAt}
               key={message?.sentAt}
             />
           ))}
@@ -202,11 +231,11 @@ function Channel() {
         <div className="channel__detailsBody">
           <div className="channel__detailsActions">
             <span>
-              <PersonAddOutlinedIcon />
+              <PersonAddOutlinedIcon onClick={togglerAdd} />
               Add
             </span>
             <span>
-              <SearchIcon />
+              <SearchIcon onClick={togglerAdd} />
               Find
             </span>
             <span>
@@ -220,17 +249,19 @@ function Channel() {
           </div>
           <hr />
           <div className="channel__detailsMembers">
-          <h4>Members({members.length})</h4>
+            <h4>Members({members.length})</h4>
             {members.map((member) => (
-              <Link
+              <div
                 key={member?.uid}
-                to={`/users/${member?.uid}`}
-                className={member?.status === 'online' ? 'isOnline' : ''}
+                className={`available__member ${
+                  member?.status === 'online' ? 'isOnline' : ''
+                }`}
               >
                 <Avatar src={member?.avatar} alt={member?.name} />
-                {member?.name}
+                <Link to={`/users/${member?.uid}`}>{member?.name}</Link>
                 <FiberManualRecordIcon />
-              </Link>
+                {member?.scope !== 'admin' ? <PersonAddDisabledIcon /> : ''}
+              </div>
             ))}
           </div>
         </div>
@@ -248,14 +279,13 @@ function Channel() {
           </div>
         </div>
         <div className="channel__detailsBody">
-          <form className="channel__detailsForm">
+          <form onSubmit={(e) => findUser(e)} className="channel__detailsForm">
             <input
-              type="search"
               placeholder="Search for a user"
               onChange={(e) => setKeyword(e.target.value)}
               required
             />
-            <Button onClick={findUser}>
+            <Button onClick={(e) => findUser(e)}>
               {!searching ? 'Find' : <div id="loading"></div>}
             </Button>
           </form>
@@ -263,15 +293,23 @@ function Channel() {
           <div className="channel__detailsMembers">
             <h4>Search Result({users.length})</h4>
             {users.map((user) => (
-              <Link
+              <div
                 key={user?.uid}
-                to={`/users/${user?.uid}`}
-                className={user?.status === 'online' ? 'isOnline' : ''}
+                className={`available__member ${
+                  user?.status === 'online' ? 'isOnline' : ''
+                }`}
               >
                 <Avatar src={user?.avatar} alt={user?.name} />
-                {user?.name}
+                <Link to={`/users/${user?.uid}`}>{user?.name}</Link>
                 <FiberManualRecordIcon />
-              </Link>
+                {currentUser.uid === user?.uid ? (
+                  <PersonAddOutlinedIcon
+                    onClick={() => addMember(id, user?.uid)}
+                  />
+                ) : (
+                  ''
+                )}
+              </div>
             ))}
           </div>
         </div>

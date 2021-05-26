@@ -1,6 +1,6 @@
 import './User.css'
 import { useState, useEffect } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { Link, useParams, useHistory } from 'react-router-dom'
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import CallIcon from '@material-ui/icons/Call'
@@ -10,6 +10,7 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import CloseIcon from '@material-ui/icons/Close'
 import Message from '../../components/message/Message'
 import { CometChat } from '@cometchat-pro/chat'
+import { Avatar, Button } from '@material-ui/core'
 
 function User() {
   const { id } = useParams()
@@ -26,7 +27,9 @@ function User() {
     setToggle(!toggle)
   }
 
-  const findUser = () => {
+  const findUser = (e) => {
+    e.preventDefault();
+
     searchTerm(keyword)
   }
 
@@ -128,7 +131,7 @@ function User() {
 
     CometChat.sendMessage(textMessage)
       .then((message) => {
-        messages.push(message)
+        setMessages((prevState) => [...prevState, message])
         setMessage('')
         scrollToEnd()
       })
@@ -143,8 +146,6 @@ function User() {
     listenForMessage(id)
     listFriend()
   }, [id])
-
-  console.log(messages)
 
   return (
     <div className="user">
@@ -224,6 +225,31 @@ function User() {
               <MoreHorizIcon />
               More
             </span>
+          </div>
+          <form onSubmit={e => findUser(e)} className="channel__detailsForm">
+            <input
+              placeholder="Search for a user"
+              onChange={(e) => setKeyword(e.target.value)}
+              required
+            />
+            <Button onClick={e => findUser(e)}>
+              {!searching ? 'Find' : <div id="loading"></div>}
+            </Button>
+          </form>
+          <hr />
+          <div className="channel__detailsMembers">
+            <h4>Users</h4>
+            {users.map((user) => (
+              <Link
+                key={user?.uid}
+                to={`/users/${user?.uid}`}
+                className={user?.status === 'online' ? 'isOnline' : ''}
+              >
+                <Avatar src={user?.avatar} alt={user?.name} />
+                {user?.name}
+                <FiberManualRecordIcon />
+              </Link>
+            ))}
           </div>
         </div>
       </div>
