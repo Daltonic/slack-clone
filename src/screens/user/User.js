@@ -265,6 +265,9 @@ function User() {
     CometChat.rejectCall(sessionID, status)
       .then((call) => {
         console.log('Call rejected successfully', call)
+        setCalling(false)
+        setIsIncomingCall(false)
+        setIsOutgoingCall(false)
       })
       .catch((error) => {
         console.log('Call rejection failed with error:', error)
