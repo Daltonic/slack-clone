@@ -92,17 +92,12 @@
 }
 
 .channel__messages::-webkit-scrollbar,
-.channel__detailsMembers::-webkit-scrollbar {
+.channel__detailsBody::-webkit-scrollbar {
   width: 0.8em;
 }
 
-.channel__messages::-webkit-scrollbar-track,
-.channel__detailsMembers::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-}
-
 .channel__messages::-webkit-scrollbar-thumb,
-.channel__detailsMembers::-webkit-scrollbar-thumb {
+.channel__detailsBody::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: none;
   border-radius: 9px;
@@ -132,6 +127,11 @@
 
 .channel__detailsActions > .MuiSvgIcon-root:hover {
   background-color: lightgray;
+}
+
+.channel__detailsBody {
+  overflow-y: auto;
+  height: calc(100vh - 112px);
 }
 
 .channel__detailsBody > hr {

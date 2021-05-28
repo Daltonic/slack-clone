@@ -1,20 +1,22 @@
 import './User.css'
 import { useState, useEffect } from 'react'
-import { Link, useParams, useHistory } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import StarBorderOutlinedIcon from '@material-ui/icons/StarBorderOutlined'
 import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import CallIcon from '@material-ui/icons/Call'
+import CallEndIcon from '@material-ui/icons/CallEnd'
+import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import SearchIcon from '@material-ui/icons/Search'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import CloseIcon from '@material-ui/icons/Close'
 import Message from '../../components/message/Message'
 import { CometChat } from '@cometchat-pro/chat'
+import { cometChat } from '../../app.config'
 import { Avatar, Button } from '@material-ui/core'
 
 function User() {
   const { id } = useParams()
-  const history = useHistory()
   const [user, setUser] = useState(null)
   const [messages, setMessages] = useState([])
   const [users, setUsers] = useState([])
@@ -22,13 +24,17 @@ function User() {
   const [message, setMessage] = useState('')
   const [searching, setSearching] = useState(false)
   const [toggle, setToggle] = useState(false)
+  const [calling, setCalling] = useState(false)
+  const [sessionID, setSessionID] = useState('')
+  const [isIncomingCall, setIsIncomingCall] = useState(false)
+  const [isOutgoingCall, setIsOutgoingCall] = useState(false)
 
   const togglerDetail = () => {
     setToggle(!toggle)
   }
 
   const findUser = (e) => {
-    e.preventDefault();
+    e.preventDefault()
 
     searchTerm(keyword)
   }
@@ -80,23 +86,6 @@ function User() {
       )
   }
 
-  const listFriend = () => {
-    const limit = 30
-    const usersRequest = new CometChat.UsersRequestBuilder()
-      .setLimit(limit)
-      .friendsOnly(true)
-      .build()
-
-    usersRequest
-      .fetchNext()
-      .then((userList) => {
-        console.log('User list received:', userList)
-      })
-      .catch((error) => {
-        console.log('User list fetching failed with error:', error)
-      })
-  }
-
   const listenForMessage = (listenerID) => {
     CometChat.addMessageListener(
       listenerID,
@@ -107,6 +96,59 @@ function User() {
         },
       })
     )
+  }
+
+  const listenForCall = (listnerID) => {
+    CometChat.addCallListener(
+      listnerID,
+      new CometChat.CallListener({
+        onIncomingCallReceived(call) {
+          console.log('Incoming call:', call)
+          // Handle incoming call
+          setSessionID(call.sessionId)
+          setIsIncomingCall(true)
+          setCalling(true)
+        },
+        onOutgoingCallAccepted(call) {
+          console.log('Outgoing call accepted:', call)
+          // Outgoing Call Accepted
+        },
+        onOutgoingCallRejected(call) {
+          console.log('Outgoing call rejected:', call)
+          // Outgoing Call Rejected
+          setIsIncomingCall(false)
+          setIsOutgoingCall(false)
+          setCalling(false)
+        },
+        onIncomingCallCancelled(call) {
+          console.log('Incoming call calcelled:', call)
+          setIsIncomingCall(false)
+          setCalling(false)
+        },
+      })
+    )
+  }
+
+  const addFriend = (uid) => {
+    const user = JSON.parse(localStorage.getItem('user'))
+
+    const url = `https://api-us.cometchat.io/v2.0/users/${user.uid}/friends`
+    const options = {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        appId: cometChat.APP_ID,
+        apiKey: cometChat.REST_KEY,
+      },
+      body: JSON.stringify({ accepted: [uid] }),
+    }
+    fetch(url, options)
+      .then(() => {
+        setToggle(false)
+        alert('Added as friend successfully')
+      })
+      .catch((err) => console.error('error:' + err))
   }
 
   const scrollToEnd = () => {
@@ -140,15 +182,142 @@ function User() {
       )
   }
 
+  const initiateCall = () => {
+    const receiverID = id //The uid of the user to be called
+    const callType = CometChat.CALL_TYPE.VIDEO
+    const receiverType = CometChat.RECEIVER_TYPE.USER
+
+    const call = new CometChat.Call(receiverID, callType, receiverType)
+
+    CometChat.initiateCall(call)
+      .then((outGoingCall) => {
+        console.log('Call initiated successfully:', outGoingCall)
+        // perform action on success. Like show your calling screen.
+        setIsOutgoingCall(true)
+        setCalling(true)
+      })
+      .catch((error) => {
+        console.log('Call initialization failed with exception:', error)
+      })
+  }
+
+  const startCall = (call) => {
+    const sessionId = call.getSessionId()
+    const callType = call.type
+    const callSettings = new CometChat.CallSettingsBuilder()
+      .setSessionID(sessionId)
+      .enableDefaultLayout(true)
+      .setIsAudioOnlyCall(callType === 'audio' ? true : false)
+      .build()
+
+    CometChat.startCall(
+      callSettings,
+      document.getElementById('callScreen'),
+      new CometChat.OngoingCallListener({
+        onUserJoined: (user) => {
+          /* Notification received here if another user joins the call. */
+          console.log('User joined call:', user)
+          /* this method can be use to display message or perform any actions if someone joining the call */
+        },
+        onUserLeft: (user) => {
+          /* Notification received here if another user left the call. */
+          console.log('User left call:', user)
+          /* this method can be use to display message or perform any actions if someone leaving the call */
+        },
+        onUserListUpdated: (userList) => {
+          console.log('user list:', userList)
+        },
+        onCallEnded: (call) => {
+          /* Notification received here if current ongoing call is ended. */
+          console.log('Call ended:', call)
+          /* hiding/closing the call screen can be done here. */
+          setIsIncomingCall(false)
+          setIsOutgoingCall(false)
+          setCalling(false)
+        },
+        onError: (error) => {
+          console.log('Error :', error)
+          /* hiding/closing the call screen can be done here. */
+        },
+        onMediaDeviceListUpdated: (deviceList) => {
+          console.log('Device List:', deviceList)
+        },
+      })
+    )
+  }
+
+  const acceptCall = (sessionID) => {
+    CometChat.acceptCall(sessionID)
+      .then((call) => {
+        console.log('Call accepted successfully:', call)
+        // start the call using the startCall() method
+        startCall(call)
+      })
+      .catch((error) => {
+        console.log('Call acceptance failed with error', error)
+        // handle exception
+      })
+  }
+
+  const rejectCall = (sessionID) => {
+    const status = CometChat.CALL_STATUS.REJECTED
+
+    CometChat.rejectCall(sessionID, status)
+      .then((call) => {
+        console.log('Call rejected successfully', call)
+      })
+      .catch((error) => {
+        console.log('Call rejection failed with error:', error)
+      })
+  }
+
   useEffect(() => {
     getUser(id)
     getMessages(id)
     listenForMessage(id)
-    listFriend()
+    listenForCall(id)
   }, [id])
 
   return (
     <div className="user">
+      {calling ? (
+        <div className="callScreen">
+          <div className="callScreen__container">
+            <div className="call-animation">
+              <img
+                className="img-circle"
+                src={user?.avatar}
+                alt=""
+                width="135"
+              />
+            </div>
+            {isOutgoingCall ? (
+              <h4>Calling {user?.name}</h4>
+            ) : (
+              <h4>{user?.name} Calling</h4>
+            )}
+
+            {isIncomingCall ? (
+              <div className="callScreen__btns">
+                <Button onClick={() => acceptCall(sessionID)}>
+                  <CallIcon />
+                </Button>
+                <Button onClick={() => rejectCall(sessionID)}>
+                  <CallEndIcon />
+                </Button>
+              </div>
+            ) : (
+              <div className="callScreen__btns">
+                <Button onClick={() => rejectCall(sessionID)}>
+                  <CallEndIcon />
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+      ) : (
+        ''
+      )}
       <div className="user__chat">
         <div className="user__header">
           <div className="user__headerLeft">
@@ -161,7 +330,7 @@ function User() {
             </h4>
           </div>
           <div className="user__headerRight">
-            <CallIcon />
+            <CallIcon onClick={initiateCall} />
             <InfoOutlinedIcon onClick={togglerDetail} />
           </div>
         </div>
@@ -214,11 +383,15 @@ function User() {
           </div>
           <div className="user__detailsActions">
             <span>
+              <PersonAddOutlinedIcon onClick={() => addFriend(user?.uid)} />
+              Add
+            </span>
+            <span>
               <SearchIcon />
               Find
             </span>
             <span>
-              <CallIcon />
+              <CallIcon onClick={initiateCall} />
               Call
             </span>
             <span>
@@ -226,13 +399,13 @@ function User() {
               More
             </span>
           </div>
-          <form onSubmit={e => findUser(e)} className="channel__detailsForm">
+          <form onSubmit={(e) => findUser(e)} className="channel__detailsForm">
             <input
               placeholder="Search for a user"
               onChange={(e) => setKeyword(e.target.value)}
               required
             />
-            <Button onClick={e => findUser(e)}>
+            <Button onClick={(e) => findUser(e)}>
               {!searching ? 'Find' : <div id="loading"></div>}
             </Button>
           </form>
@@ -240,15 +413,16 @@ function User() {
           <div className="channel__detailsMembers">
             <h4>Users</h4>
             {users.map((user) => (
-              <Link
+              <div
                 key={user?.uid}
-                to={`/users/${user?.uid}`}
-                className={user?.status === 'online' ? 'isOnline' : ''}
+                className={`available__member ${
+                  user?.status === 'online' ? 'isOnline' : ''
+                }`}
               >
                 <Avatar src={user?.avatar} alt={user?.name} />
-                {user?.name}
+                <Link to={`/users/${user?.uid}`}>{user?.name}</Link>
                 <FiberManualRecordIcon />
-              </Link>
+              </div>
             ))}
           </div>
         </div>

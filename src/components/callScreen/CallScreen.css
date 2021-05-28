@@ -1,0 +1,84 @@
+.callScreen {
+  background-color: #000000c4;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  z-index: 99999;
+}
+
+.callScreen__container {
+  display: grid;
+  place-items: center;
+  margin-top: 25vh;
+  width: 80%;
+}
+
+.callScreen__container > h4 {
+  margin: 30px 0;
+  color: white;
+}
+
+.callScreen__btns {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 35%;
+  margin-top: 30px;
+}
+
+.callScreen__btns > button {
+  border-radius: 50%;
+  min-height: 40px;
+  min-width: 40px;
+}
+
+.callScreen__btns > button:first-child {
+  background-color: green;
+}
+
+.callScreen__btns > button:last-child {
+  background-color: red;
+}
+
+.callScreen__btns > button .MuiSvgIcon-root {
+  color: white;
+}
+
+.call-animation {
+  background: #fff;
+  width: 135px;
+  height: 135px;
+  position: relative;
+  margin: 0 auto;
+  border-radius: 100%;
+  border: solid 5px #fff;
+  animation: play 2s ease infinite;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  -ms-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+.callScreen__container > img {
+  width: 135px;
+  height: 135px;
+  border-radius: 100%;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+@keyframes play {
+  0% {
+    transform: scale(1);
+  }
+  15% {
+    box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.4);
+  }
+  25% {
+    box-shadow: 0 0 0 10px rgba(255, 255, 255, 0.4),
+      0 0 0 20px rgba(255, 255, 255, 0.2);
+  }
+  25% {
+    box-shadow: 0 0 0 15px rgba(255, 255, 255, 0.4),
+      0 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}

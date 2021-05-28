@@ -156,10 +156,27 @@ function Channel() {
     ]
 
     CometChat.addMembersToGroup(GUID, membersList, [])
-      .then((member) => setMembers((prevState) => [...prevState, member]))
+      .then((member) => {
+        setMembers((prevState) => [...prevState, member])
+        alert('Member added successfully')
+      })
       .catch((error) => {
         console.log('Something went wrong', error)
+        alert(error.message)
       })
+  }
+
+  const remMember = (GUID, UID) => {
+    CometChat.kickGroupMember(GUID, UID).then(
+      (response) => {
+        const index = members.findIndex(member => member.uid === UID)
+        members.splice(index, 1)
+        console.log('Group member kicked successfully', response) 
+      },
+      (error) => {
+        console.log('Group member kicking failed with error', error)
+      }
+    )
   }
 
   useEffect(() => {
@@ -260,7 +277,14 @@ function Channel() {
                 <Avatar src={member?.avatar} alt={member?.name} />
                 <Link to={`/users/${member?.uid}`}>{member?.name}</Link>
                 <FiberManualRecordIcon />
-                {member?.scope !== 'admin' ? <PersonAddDisabledIcon /> : ''}
+                {member?.scope !== 'admin' ? (
+                  <PersonAddDisabledIcon
+                    onClick={() => remMember(id, member?.uid)}
+                    title={member?.scope}
+                  />
+                ) : (
+                  <LockIcon title={member?.scope} />
+                )}
               </div>
             ))}
           </div>
@@ -302,7 +326,7 @@ function Channel() {
                 <Avatar src={user?.avatar} alt={user?.name} />
                 <Link to={`/users/${user?.uid}`}>{user?.name}</Link>
                 <FiberManualRecordIcon />
-                {currentUser.uid === user?.uid ? (
+                {currentUser.uid !== user?.uid ? (
                   <PersonAddOutlinedIcon
                     onClick={() => addMember(id, user?.uid)}
                   />

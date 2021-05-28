@@ -19,29 +19,27 @@ function Sidebar() {
   const [dms, setDms] = useState([])
   const history = useHistory()
 
-  const getDirectMessages = () => {
-    db.collection('dms').onSnapshot((snapshot) => {
-      setDms(
-        snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }))
-      )
-    })
-  }
+  // const getDirectMessages = () => {
+  //   db.collection('dms').onSnapshot((snapshot) => {
+  //     setDms(
+  //       snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }))
+  //     )
+  //   })
+  // }
 
-  const getDirectMessagesTest = () => {
+  const getDirectMessages = () => {
     const limit = 10
     const usersRequest = new CometChat.UsersRequestBuilder()
       .setLimit(limit)
-      // .friendsOnly(true)
+      .friendsOnly(true)
       .build()
 
     usersRequest
       .fetchNext()
-      .then((userList) => {
-        console.log('User list received:', userList)
-      })
+      .then((userList) => setDms(userList))
       .catch((error) => {
         console.log('User list fetching failed with error:', error)
       })
@@ -78,7 +76,6 @@ function Sidebar() {
 
     getChannels()
     getDirectMessages()
-    // getDirectMessagesTest()
   }, [])
 
   return (
@@ -134,8 +131,8 @@ function Sidebar() {
           <SidebarOption
             Icon={FiberManualRecordIcon}
             title={dm.name}
-            id={dm.id}
-            key={dm.id}
+            id={dm.uid}
+            key={dm.uid}
             sub="sidebarOption__sub sidebarOption__color"
             user
           />
