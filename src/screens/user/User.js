@@ -28,6 +28,7 @@ function User() {
   const [sessionID, setSessionID] = useState('')
   const [isIncomingCall, setIsIncomingCall] = useState(false)
   const [isOutgoingCall, setIsOutgoingCall] = useState(false)
+  const [isLive, setIsLive] = useState(false)
 
   const togglerDetail = () => {
     setToggle(!toggle)
@@ -112,6 +113,7 @@ function User() {
         onOutgoingCallAccepted(call) {
           console.log('Outgoing call accepted:', call)
           // Outgoing Call Accepted
+          startCall(call)
         },
         onOutgoingCallRejected(call) {
           console.log('Outgoing call rejected:', call)
@@ -122,6 +124,7 @@ function User() {
         },
         onIncomingCallCancelled(call) {
           console.log('Incoming call calcelled:', call)
+          setIsIncomingCall(false)
           setIsIncomingCall(false)
           setCalling(false)
         },
@@ -193,6 +196,7 @@ function User() {
       .then((outGoingCall) => {
         console.log('Call initiated successfully:', outGoingCall)
         // perform action on success. Like show your calling screen.
+        setSessionID(outGoingCall.sessionId)
         setIsOutgoingCall(true)
         setCalling(true)
       })
@@ -202,13 +206,19 @@ function User() {
   }
 
   const startCall = (call) => {
-    const sessionId = call.getSessionId()
+    const sessionId = call.sessionId
     const callType = call.type
     const callSettings = new CometChat.CallSettingsBuilder()
       .setSessionID(sessionId)
       .enableDefaultLayout(true)
       .setIsAudioOnlyCall(callType === 'audio' ? true : false)
       .build()
+
+    setSessionID(sessionId)
+    setIsOutgoingCall(false)
+    setIsIncomingCall(false)
+    setCalling(false)
+    setIsLive(true)
 
     CometChat.startCall(
       callSettings,
@@ -234,6 +244,7 @@ function User() {
           setIsIncomingCall(false)
           setIsOutgoingCall(false)
           setCalling(false)
+          setIsLive(false)
         },
         onError: (error) => {
           console.log('Error :', error)
@@ -268,9 +279,23 @@ function User() {
         setCalling(false)
         setIsIncomingCall(false)
         setIsOutgoingCall(false)
+        setIsLive(false)
       })
       .catch((error) => {
         console.log('Call rejection failed with error:', error)
+      })
+  }
+
+  const endCall = (sessionID) => {
+    CometChat.endCall(sessionID)
+      .then((call) => {
+        console.log('call ended', call)
+        setCalling(false)
+        setIsIncomingCall(false)
+        setIsIncomingCall(false)
+      })
+      .catch((error) => {
+        console.log('error', error)
       })
   }
 
@@ -311,7 +336,7 @@ function User() {
               </div>
             ) : (
               <div className="callScreen__btns">
-                <Button onClick={() => rejectCall(sessionID)}>
+                <Button onClick={() => endCall(sessionID)}>
                   <CallEndIcon />
                 </Button>
               </div>
@@ -430,6 +455,7 @@ function User() {
           </div>
         </div>
       </div>
+      {isLive ? <div id="callScreen"></div> : ''}
     </div>
   )
 }

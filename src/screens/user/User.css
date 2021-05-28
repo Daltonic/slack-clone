@@ -265,6 +265,17 @@
   }
 }
 
+#callScreen {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  /* visibility: hidden; */
+}
+
+.showCaller {
+  visibility: visible;
+}
+
 .callScreen {
   background-color: #000000c4;
   width: 100vw;
