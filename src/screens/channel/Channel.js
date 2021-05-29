@@ -24,7 +24,7 @@ function Channel() {
   const [members, setMembers] = useState([])
   const [users, setUsers] = useState([])
   const [keyword, setKeyword] = useState(null)
-  const [currentUser, setCurrentUser] = useState(null)
+  const [currentUser, setCurrentUser] = useState({})
   const [message, setMessage] = useState('')
   const [searching, setSearching] = useState(false)
   const [toggle, setToggle] = useState(false)
@@ -173,11 +173,14 @@ function Channel() {
   }
 
   const remMember = (GUID, UID) => {
+    if (channel.scope !== 'owner') return null
+
     CometChat.kickGroupMember(GUID, UID).then(
       (response) => {
         const index = members.findIndex((member) => member.uid === UID)
         members.splice(index, 1)
         console.log('Group member kicked successfully', response)
+        alert('Member removed successfully')
       },
       (error) => {
         console.log('Group member kicking failed with error', error)
@@ -470,10 +473,14 @@ function Channel() {
                 <Link to={`/users/${member?.uid}`}>{member?.name}</Link>
                 <FiberManualRecordIcon />
                 {member?.scope !== 'admin' ? (
-                  <PersonAddDisabledIcon
-                    onClick={() => remMember(id, member?.uid)}
-                    title={member?.scope}
-                  />
+                  channel?.scope === 'admin' ? (
+                    <PersonAddDisabledIcon
+                      onClick={() => remMember(id, member?.uid)}
+                      title={member?.scope}
+                    />
+                  ) : (
+                    ''
+                  )
                 ) : (
                   <LockIcon title={member?.scope} />
                 )}
@@ -519,9 +526,13 @@ function Channel() {
                 <Link to={`/users/${user?.uid}`}>{user?.name}</Link>
                 <FiberManualRecordIcon />
                 {currentUser.uid !== user?.uid ? (
-                  <PersonAddOutlinedIcon
-                    onClick={() => addMember(id, user?.uid)}
-                  />
+                  channel?.scope === 'admin' ? (
+                    <PersonAddOutlinedIcon
+                      onClick={() => addMember(id, user?.uid)}
+                    />
+                  ) : (
+                    ''
+                  )
                 ) : (
                   ''
                 )}
