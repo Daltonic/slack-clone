@@ -1,6 +1,6 @@
 import './Sidebar.css'
 import { useState, useEffect } from 'react'
-import db, { auth } from '../../firebase'
+import { auth } from '../../firebase'
 import SidebarOption from '../sidebarOption/SidebarOption'
 import CreateIcon from '@material-ui/icons/Create'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
@@ -18,17 +18,6 @@ function Sidebar() {
   const [user, setUser] = useState(null)
   const [dms, setDms] = useState([])
   const history = useHistory()
-
-  // const getDirectMessages = () => {
-  //   db.collection('dms').onSnapshot((snapshot) => {
-  //     setDms(
-  //       snapshot.docs.map((doc) => ({
-  //         id: doc.id,
-  //         ...doc.data(),
-  //       }))
-  //     )
-  //   })
-  // }
 
   const getDirectMessages = () => {
     const limit = 10
