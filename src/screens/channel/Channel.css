@@ -141,8 +141,6 @@
 
 .channel__detailsMembers {
   margin: 30px;
-  overflow-y: auto;
-  height: calc(100vh - 308px);
 }
 
 .channel__detailsMembers > .available__member {
@@ -246,4 +244,10 @@
   to {
     -webkit-transform: rotate(360deg);
   }
+}
+
+.MuiButton-root.deleteBtn {
+  color: red;
+  text-transform: capitalize;
+  padding: 0 !important;
 }

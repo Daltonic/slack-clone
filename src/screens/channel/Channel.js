@@ -335,6 +335,20 @@ function Channel() {
       })
   }
 
+  const deleteChannel = (GUID) => {
+    if (window.confirm('You want to delete ?')) {
+      CometChat.deleteGroup(GUID).then(
+        (response) => {
+          console.log('Channel deleted successfully:', response)
+          window.location.href = '/'
+        },
+        (error) => {
+          console.log('Channel delete failed with exception:', error)
+        }
+      )
+    }
+  }
+
   useEffect(() => {
     getChannel(id)
     getMessages(id)
@@ -486,6 +500,12 @@ function Channel() {
                 )}
               </div>
             ))}
+          </div>
+          <hr />
+          <div className="channel__detailsMembers">
+            <Button className="deleteBtn" onClick={() => deleteChannel(id)}>
+              Delete Channel
+            </Button>
           </div>
         </div>
       </div>
