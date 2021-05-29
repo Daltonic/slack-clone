@@ -35,6 +35,6 @@
   margin-left: 10px;
 }
 
-.sidebarOption__color > .sidebarOption__icon {
+.isOnline > .MuiSvgIcon-root {
   color: green;
 }

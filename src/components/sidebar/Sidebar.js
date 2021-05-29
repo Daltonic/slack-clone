@@ -135,6 +135,7 @@ function Sidebar() {
             key={dm.uid}
             sub="sidebarOption__sub sidebarOption__color"
             user
+            online={dm.status === 'online' ? 'isOnline' : ''}
           />
         ))}
       </div>

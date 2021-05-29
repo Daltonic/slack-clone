@@ -1,7 +1,15 @@
 import './SidebarOption.css'
 import { useHistory } from 'react-router-dom'
 
-function SidebarOption({ Icon, title, sub, id, addChannelOption, user }) {
+function SidebarOption({
+  Icon,
+  title,
+  sub,
+  id,
+  addChannelOption,
+  user,
+  online,
+}) {
   const history = useHistory()
   const selectChannel = () => {
     if (id) {
@@ -21,7 +29,7 @@ function SidebarOption({ Icon, title, sub, id, addChannelOption, user }) {
 
   return (
     <div
-      className={`sidebarOption ${sub}`}
+      className={`sidebarOption ${online} ${sub}`}
       onClick={addChannelOption ? addChannel : selectChannel}
     >
       {Icon && <Icon className="sidebarOption__icon" />}

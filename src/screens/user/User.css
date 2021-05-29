@@ -330,6 +330,7 @@
   margin: 0 auto;
   border-radius: 100%;
   border: solid 5px #fff;
+  overflow: hidden;
   animation: play 2s ease infinite;
   -webkit-backface-visibility: hidden;
   -moz-backface-visibility: hidden;
