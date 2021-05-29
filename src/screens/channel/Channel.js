@@ -24,7 +24,7 @@ function Channel() {
   const [members, setMembers] = useState([])
   const [users, setUsers] = useState([])
   const [keyword, setKeyword] = useState(null)
-  const [currentUser, setCurrentUser] = useState({})
+  const [currentUser, setCurrentUser] = useState(null)
   const [message, setMessage] = useState('')
   const [searching, setSearching] = useState(false)
   const [toggle, setToggle] = useState(false)
@@ -336,7 +336,7 @@ function Channel() {
   }
 
   const deleteChannel = (GUID) => {
-    if (window.confirm('You want to delete ?')) {
+    if (window.confirm('Are you sure?')) {
       CometChat.deleteGroup(GUID).then(
         (response) => {
           console.log('Channel deleted successfully:', response)
@@ -501,12 +501,18 @@ function Channel() {
               </div>
             ))}
           </div>
-          <hr />
-          <div className="channel__detailsMembers">
-            <Button className="deleteBtn" onClick={() => deleteChannel(id)}>
-              Delete Channel
-            </Button>
-          </div>
+          {channel?.scope === 'owner' ? (
+            <>
+              <hr />
+              <div className="channel__detailsMembers">
+                <Button className="deleteBtn" onClick={() => deleteChannel(id)}>
+                  Delete Channel
+                </Button>
+              </div>
+            </>
+          ) : (
+            ''
+          )}
         </div>
       </div>
 

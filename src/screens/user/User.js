@@ -6,6 +6,7 @@ import InfoOutlinedIcon from '@material-ui/icons/InfoOutlined'
 import CallIcon from '@material-ui/icons/Call'
 import CallEndIcon from '@material-ui/icons/CallEnd'
 import PersonAddOutlinedIcon from '@material-ui/icons/PersonAddOutlined'
+import PersonAddDisabledIcon from '@material-ui/icons/PersonAddDisabled'
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord'
 import SearchIcon from '@material-ui/icons/Search'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
@@ -20,6 +21,7 @@ function User() {
   const [user, setUser] = useState(null)
   const [messages, setMessages] = useState([])
   const [users, setUsers] = useState([])
+  const [currentUser, setCurrentUser] = useState(null)
   const [keyword, setKeyword] = useState(null)
   const [message, setMessage] = useState('')
   const [searching, setSearching] = useState(false)
@@ -130,6 +132,45 @@ function User() {
         },
       })
     )
+  }
+
+  const listFriends = () => {
+    const limit = 10
+    const usersRequest = new CometChat.UsersRequestBuilder()
+      .setLimit(limit)
+      .friendsOnly(true)
+      .build()
+
+    usersRequest
+      .fetchNext()
+      .then((userList) => setUsers(userList))
+      .catch((error) => {
+        console.log('User list fetching failed with error:', error)
+      })
+  }
+
+  const remFriend = (uid, fid) => {
+    if (window.confirm('Are you sure?')) {
+      const url = `https://api-us.cometchat.io/v2.0/users/${uid}/friends`
+      const options = {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          appId: cometChat.APP_ID,
+          apiKey: cometChat.REST_KEY,
+        },
+        body: JSON.stringify({ friends: [fid] }),
+      }
+
+      fetch(url, options)
+        .then(() => {
+          const index = users.findIndex(user => user.uid === fid)
+          users.splice(index, 1)
+          alert('Friend Removed successfully!')
+        })
+        .catch((err) => console.error('error:' + err))
+    }
   }
 
   const addFriend = (uid) => {
@@ -304,6 +345,9 @@ function User() {
     getMessages(id)
     listenForMessage(id)
     listenForCall(id)
+    listFriends(id)
+
+    setCurrentUser(JSON.parse(localStorage.getItem('user')))
   }, [id])
 
   return (
@@ -439,7 +483,7 @@ function User() {
           </form>
           <hr />
           <div className="channel__detailsMembers">
-            <h4>Users</h4>
+            <h4>Friends</h4>
             {users.map((user) => (
               <div
                 key={user?.uid}
@@ -450,6 +494,13 @@ function User() {
                 <Avatar src={user?.avatar} alt={user?.name} />
                 <Link to={`/users/${user?.uid}`}>{user?.name}</Link>
                 <FiberManualRecordIcon />
+                {currentUser?.uid.toLowerCase() === id.toLowerCase() ? (
+                  <PersonAddDisabledIcon
+                    onClick={() => remFriend(id, user?.uid)}
+                  />
+                ) : (
+                  ''
+                )}
               </div>
             ))}
           </div>
