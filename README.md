@@ -61,7 +61,7 @@ export { firebaseConfig, cometChat }
 ```
 
 11. Make sure to exclude **app.config.js** in your gitIgnore file from being exposed online.
-12. Run the following command to install the CometChat SDK.
+12. Run the following command to install the app.
 
 ```sh
     npm install
