@@ -1,70 +1,81 @@
-# Getting Started with Create React App
+# How to Build a Team Messenger Site With React (Slack Clone)
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Read the full tutorial here: [**>> How to Build a Team Messenger Site With React (Slack Clone)**](https://www.cometchat.com/tutorials/#)
 
-## Available Scripts
+This example shows How to Build a Team Messenger Site With React (Slack Clone):
 
-In the project directory, you can run:
+![Slack Clone](./screenshots/0.gif)
+<center><figcaption>Slack Clone</figcaption></center>
 
-### `npm start`
+![Slack Clone](./screenshots/1.png)
+<center><figcaption>Slack Clone Call Screen</figcaption></center>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+![Slack Clone](./screenshots/2.png)
+<center><figcaption>Slack Clone Login Screen</figcaption></center>
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Technology
 
-### `npm test`
+This demo uses:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- CometChat Pro 2.3.0
+- Firebase
+- React
+- Material Icons
 
-### `npm run build`
+## Running the demo
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+To run the demo follow these steps:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. [Head to CometChat Pro and create an account](https://app.cometchat.com/signup)
+2. From the [dashboard](https://app.cometchat.com/apps), add a new app called **"slack-clone"**
+3. Select this newly added app from the list.
+4. From the Quick Start copy the **APP_ID, APP_REGION and AUTH_KEY**. These will be used later.
+5. Also copy the **REST_API_KEY** from the API & Auth Key tab.
+6. Navigate to the Users tab, and delete all the default users and groups leaving it clean **(very important)**.
+7. Download the repository [here](https://github.com/Daltonic/slack-clone/archive/master.zip) or by running `git clone https://github.com/Daltonic/slack-clone.git` and open it in a code editor.
+8. [Head to Firebase and create a new project](https://console.firebase.google.com)
+9. Create a file called **app.config.js** in the **src** folder of your project.
+10. Import and inject your secret keys in the **app.config.js** file containing your CometChat and Firebase in this manner.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```js
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: 'xxx-xxx-xxx-xxx-xxx-xxx-xxx-xxx',
+  authDomain: 'xxx-xxx-xxx-xxx-xxx-xxx-xxx',
+  databaseURL: 'xxx-xxx-xxx-xxx-xxx-xxx-xxx-xxx-xxx',
+  projectId: 'xxx-xxx-xxx',
+  storageBucket: 'xxx-xxx-xxx-xxx-xxx',
+  messagingSenderId: 'xxx-xxx-xxx',
+  appId: 'xxx-xxx-xxx-xxx-xxx-xxx-xxx-xxx',
+  measurementId: 'xxx-xxx-xxx',
+}
 
-### `npm run eject`
+const cometChat = {
+  APP_ID: 'xxx-xxx-xxx',
+  AUTH_KEY: 'xxx-xxx-xxx-xxx-xxx-xxx-xxx-xxx',
+  REST_KEY: 'xxx-xxx-xxx-xxx-xxx-xxx-xxx-xxx',
+  APP_REGION: 'xx',
+}
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+export { firebaseConfig, cometChat }
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+11. Make sure to exclude **app.config.js** in your gitIgnore file from being exposed online.
+12. Run the following command to install the CometChat SDK.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```sh
+    npm install
+    npm start
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Questions about running the demo? [Open an issue](https://github.com/Daltonic/slack-clone/issues). We're here to help ✌️
 
-## Learn More
+## Useful links
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+- 🏠 [CometChat Homepage](https://app.cometchat.com/signup)
+- 🚀 [Create your free account](https://app.cometchat.com/apps)
+- 📚 [Documentation](https://prodocs.cometchat.com)
+- 👾 [GitHub](https://www.github.com/cometchat-pro)
+- 🔥 [Firebase](https://console.firebase.google.com)
+- 🔷 [React](https://reactjs.org/)
+- ✨ [Live Demo](https://slack-clone-b1ecf.web.app/)
